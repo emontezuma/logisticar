@@ -1,0 +1,39 @@
+<div class="contenido" class="mat-typography">
+    
+    <div class="cabecera" mat-dialog-title>
+        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_licencia"></mat-icon>
+        <span class="titulo">Aplicar licencia</span>
+    </div>
+    <div class="registroCampo">        
+        <div class="registroTitulo">Número de instalación</div>    
+        <div class="registroValor">
+            <div *ngIf="clave" class="registroTituloSegundo">{{ clave }}</div>   
+            <div *ngIf="!clave" class="pistaError">No se ha completado la licencia para MMCall</div>    
+        </div>    
+    </div>    
+    <div class="registroCampo" [style.marginTop.px]="10">     
+        <div class="registroTitulo" >Número de licencia LogistiCAR</div>    
+        <div class="registroValor">
+            <mat-form-field class="texto">
+                <input matInput #txtT1 [(ngModel)]="licencia" maxlength="30" autocomplete="off" name="licencia"  #licencia1 ="ngModel" [disabled]="!clave">
+                <button mat-button *ngIf="licencia" matSuffix mat-icon-button aria-label="Clear" (click)="licencia = '';">
+                    <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                </button>
+                <mat-hint class="pista" align="end">{{ licencia1.value?.length || 0 }} de 30</mat-hint>
+                <mat-hint class="pista" align="start">Licencia de 30 digitos</mat-hint>
+            </mat-form-field>     
+        </div>    
+    </div>
+        <div class="pie" mat-dialog-actions>
+            <button class="positivo indice" mat-button (mouseover)="validar01=true;" (mouseout)="validar01=false;" [ngClass]="{ botHover: validar01 }" (click)="validar(1)" [disabled]="licencia.length!=30"  [ngStyle]="{ 'font-size': movil ? '11px' : '17px' }">
+                <mat-icon [ngClass]="{ iconPB_3: licencia.length==30, iconPB_3_disabled: licencia.length!=30 }" svgIcon="in_seleccionado"></mat-icon>
+                <span class="botTexto">Aplicar licencia</span>
+            </button>
+
+            <button class="boton indice" mat-button (mouseover)="validar02=true;" (mouseout)="validar02=false;" [ngClass]="{ botHover: validar02 }" (click)="validar(2)"  [ngStyle]="{ 'font-size': movil ? '11px' : '17px' }">
+                <mat-icon class="iconPB" svgIcon="i_cancelar"></mat-icon>
+                <span class="botTexto">Cancelar</span>
+            </button>
+        </div>
+    </div>
+    

@@ -1,0 +1,1318 @@
+
+<div id="todo" class="mat-typography">
+    <div class="pantallaError"   *ngIf="pantalla==1">
+        <div class="cabeceraMensaje" >{{ errorTitulo }}</div>
+        <div class="mensaje" [innerHTML]="errorMensaje"></div>
+    </div>
+    <div class="catalogos">
+        <div class="cabecera" @esquema_top *ngIf="verTop">
+            <div class="columnas" *ngIf="filtrando">
+                
+                <div class="izquierda">
+                    <button class="boton regreso3 botTomado" mat-button (mouseover)="bot1Sel=true;" (mouseout)="bot1Sel=false;" [ngClass]="{ botHover: bot1Sel }" (click)="regresar()" >
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_regresar"></mat-icon>
+                        <div class="texto">Regresar</div> 
+                    </button>
+                </div>
+                    <div class="derecha">
+                    <button class="boton regreso3" mat-button (mouseover)="aplicarSel=true;" (mouseout)="aplicarSel=false;" [ngClass]="{botHover: aplicarSel}" (click)="guardar(0)">
+                        <mat-icon class="conoBarras iconPB_2" svgIcon="in_seleccionado"></mat-icon>
+                        <div class="texto">Aplicar</div>
+                    </button>
+                    <button class="boton regreso3" mat-button (mouseover)="guardarSel=true;" (mouseout)="guardarSel=false;" [ngClass]="{botHover: guardarSel}" (click)="guardar(1)" [disabled]="!botGuar">
+                        <mat-icon class="conoBarras iconPB_2" svgIcon="i_guardar"></mat-icon>
+                        <div class="texto">Guardar</div>
+                    </button>
+                    <button class="boton regreso3" mat-button (mouseover)="bot4Sel=true;" (mouseout)="bot4Sel=false;" [ngClass]="{botHover: bot4Sel}" (click)="cancelar()" [disabled]="!botCan">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_cancelar" ></mat-icon>
+                        <div class="texto">Cancelar</div>
+                    </button>
+                    <button class="boton regreso3" mat-button (mouseover)="bot7Sel=true;" (mouseout)="bot7Sel=false;" [ngClass]="{botHover: bot7Sel}" (click)="eliminarConsulta()" [disabled]="!botElim">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_eliminar" ></mat-icon>
+                        <div class="texto">Eliminar</div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="columnas" *ngIf="formateando">
+                <div class="izquierda">
+                    <button class="boton regreso3 botTomado" mat-button (mouseover)="bot1Sel=true;" (mouseout)="bot1Sel=false;" [ngClass]="{ botHover: bot1Sel }" (click)="regresar()" >
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_regresar"></mat-icon>
+                        <div class="texto">Regresar</div> 
+                    </button>
+                </div>
+                <div class="derecha">
+                    <button class="boton regreso3" mat-button (mouseover)="guardarSel=true;" (mouseout)="guardarSel=false;" [ngClass]="{botHover: guardarSel}" (click)="guardarF()" [disabled]="!botGuar">
+                        <mat-icon class="conoBarras iconPB_2" svgIcon="i_guardar"></mat-icon>
+                        <div class="texto">Guardar</div>
+                    </button>
+                    <button class="boton regreso3" mat-button (mouseover)="bot4Sel=true;" (mouseout)="bot4Sel=false;" [ngClass]="{botHover: bot4Sel}" (click)="cancelarF()" [disabled]="!botCan">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_cancelar" ></mat-icon>
+                        <div class="texto">Cancelar</div>
+                    </button>
+                    <button class="boton regreso6" mat-button (mouseover)="bot8Sel=true;" (mouseout)="bot8Sel=false;" [ngClass]="{botHover: bot8Sel}" (click)="predeterminados()">
+                        <mat-icon class="conoBarras iconPB_2" svgIcon="i_recuperar"></mat-icon>
+                        <div class="texto">Restaurar predeterminados</div>
+                    </button>
+                </div>
+            </div>
+            <div class="columnas" *ngIf="graficando">
+                <div class="derecha">
+                    <button class="boton regreso3 seccionDer" mat-button (mouseover)="descargarD=true;" (mouseout)="descargarD=false;" [ngClass]="{botHover: descargarD}" (click)="exportar();" *ngIf="graficando">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_descargar" ></mat-icon>
+                        <div class="texto_d">Descargar datos</div>
+                    </button>
+                    <button class="boton regreso3" mat-button (mouseover)="formato=true;" (mouseout)="formato=false;" [ngClass]="{botHover: formato}" (click)="formatear()" *ngIf="graficando">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_formato" ></mat-icon>
+                        <div class="texto_d">Formato</div>
+                    </button>
+                    <button class="boton regreso3" mat-button (mouseover)="filtrarC=true;" (mouseout)="filtrarC=false;" [ngClass]="{botTomado: hayFiltro, botHover: filtrarC}" (click)="filtrar()" *ngIf="graficando" [matTooltip] = "ayuda20" matTooltipClass = "toolTip" matTooltipShowDelay = "100">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_filtro" ></mat-icon>
+                        <div class="texto_d">Filtrar</div>
+                    </button>
+                    <button class="boton regreso3 seccionDer" mat-button (mouseover)="izquierda=true;" (mouseout)="izquierda=false;" [ngClass]="{botHover: izquierda}" (click)="preGraficar(-10)" [matTooltip] = "ayuda02" matTooltipClass = "toolTip" matTooltipShowDelay = "100" *ngIf="graficando">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_izquierda" ></mat-icon>                    
+                        <div class="texto_d">Anterior</div>
+                    </button>
+                    <button class="boton regreso3" mat-button (mouseover)="derecha=true;" (mouseout)="derecha=false;" [ngClass]="{botHover: derecha}" (click)="preGraficar(-5)" [matTooltip] = "ayuda03" matTooltipClass = "toolTip" matTooltipShowDelay = "100" *ngIf="graficando">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_derecha" ></mat-icon>
+                        <div class="texto_d">Siguiente</div>
+                    </button>
+                    <button class="boton regreso3" mat-button [matMenuTriggerFor]="mnuGraficas" (mouseover)="derechaM=true;" (mouseout)="derechaM=false;" [ngClass]="{botHover: derechaM}" [matTooltip] = "ayuda04" matTooltipClass = "toolTip" matTooltipShowDelay = "100" *ngIf="graficando">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_bajar" ></mat-icon>
+                        <div class="texto_d">Menú</div>
+                    </button>
+                </div>
+            </div>
+            <mat-menu #mnuGraficas="matMenu">
+                <div class="mUsuario">
+                    <button mat-menu-item class="menuOpcion" *ngFor="let opcion of opciones; let i = index" (click)="aplicarConsulta(i)" [ngClass]="{ menuTomado: graficaActual == i + 1, menuOpcionNV: opcion.visualizar=='N' } ">
+                        <mat-icon class="iconBarra_m" [svgIcon]="icono_grafica" [style.marginTop.px]="-25"></mat-icon>
+                        <div class="titulo" [matTooltip]="opcion.nombre" matTooltipClass = "toolTip">{{ opcion.nombre }}</div>
+                    </button>
+                </div>
+            </mat-menu>
+        </div>
+        <div class="contenedorScroll" cdkScrollable>
+            <div class="grafico" [style.backgroundColor]="parGrafica.color_fondo" @esquema_grafica (@esquema.done)="salidaEfecto($event)" *ngIf="modelo==1">
+                <dx-chart
+                    id="graficoFallas"
+                    [dataSource]="miGrafica"
+                    palette="soft"
+                    resolveLabelOverlapping="stack"
+                    [containerBackgroundColor]="parGrafica.color_fondo" [customizePoint]="calcularColor" (onDone)="terminaGrafico($event)">
+                    <dxo-margin
+                        [right]="parGrafica.margen_derecha" [left]="parGrafica.margen_izquierda" [top]="parGrafica.margen_arriba" [bottom]="parGrafica.margen_abajo">
+                    </dxo-margin>
+                    <dxo-size [height]="parGrafica.alto >0 ? parGrafica.alto : altoGrafica" [width]="parGrafica.ancho > 0 ? parGrafica.ancho : anchoGrafica"></dxo-size>
+                    <dxo-animation [enabled]= "true"></dxo-animation>
+                    <dxo-common-pane-settings [backgroundColor]="parGrafica.color_fondo_barras"></dxo-common-pane-settings>
+                    <dxo-title *ngIf="parGrafica.titulo" [text]="parGrafica.titulo">
+                        <dxo-subtitle [text]="parGrafica.sub_titulo">
+                            <dxo-font
+                            [size]="parGrafica.sub_titulo_fuente"
+                            [color]="parGrafica.color_letras"
+                            weight="550">
+                        </dxo-font>
+                        </dxo-subtitle>
+                        <dxo-font
+                            [size]="parGrafica.titulo_fuente"
+                            [color]="parGrafica.color_letras"
+                            weight="600">
+                        </dxo-font>
+                    </dxo-title>
+
+                    <dxi-series *ngIf="grActual==1" [color]="parGrafica.color_barra" [type]="parGrafica.tipo_valor" [valueField]="variable_2" [name]="variable_literal">
+                        <dxo-label [visible]="parGrafica.etiqueta_mostrar=='S'" [backgroundColor]="parGrafica.etiqueta_fondo" overlappingBehavior="hide" position="inside">
+                            <dxo-format
+                                [type]="formatoGraficoTiempo.tipo"
+                                [precision]="formatoGraficoTiempo.precision">
+                            </dxo-format>
+                            <dxo-font [size]="parGrafica.etiqueta_fuente" [color]="parGrafica.etiqueta_color" weight="550"></dxo-font>
+                            <dxo-border [color]="parGrafica.etiqueta_color" visible="true" width="1"></dxo-border>
+                        </dxo-label>
+                    </dxi-series>
+
+                    <dxi-series *ngIf="grActual==2 && parGrafica.oee[0]=='S'" [axis]="variable" [type]="parGrafica.tipo_valorFTQ" [valueField]="variableftq_2" [name]="variableftq_literal" [color]="parGrafica.colorFTQ">
+                        <dxo-label [visible]="parGrafica.oee[3]=='S'" [backgroundColor]="parGrafica.etiqueta_fondo" overlappingBehavior="hide" position="inside" [customizeText]="calcularHora" displayMode="rotate" [rotationAngle]="anguloEtiqueta">
+                            <dxo-format
+                                [type]="formatoGraficoTiempo.tipo"
+                                [precision]="formatoGraficoTiempo.precision">
+                            </dxo-format>
+                            <dxo-font [size]="parGrafica.etiqueta_fuente" [color]="parGrafica.etiqueta_color" weight="550"></dxo-font>
+                            <dxo-border [color]="parGrafica.etiqueta_color" visible="true" width="1"></dxo-border>
+                        </dxo-label>
+                    </dxi-series>
+
+                    <dxi-series *ngIf="grActual==2 && parGrafica.oee[2]=='S'" [axis]="variable" [type]="parGrafica.tipo_valorDIS" [valueField]="variabledis_2" [name]="variabledis_literal" [color]="parGrafica.colorDIS">
+                        <dxo-label [visible]="parGrafica.oee[5]=='S'" [backgroundColor]="parGrafica.etiqueta_fondo" overlappingBehavior="hide" position="inside" [customizeText]="calcularHora" displayMode="rotate" [rotationAngle]="anguloEtiqueta">
+                            <dxo-format
+                                [type]="formatoGraficoTiempo.tipo"
+                                [precision]="formatoGraficoTiempo.precision">
+                            </dxo-format>
+                            <dxo-font [size]="parGrafica.etiqueta_fuente" [color]="parGrafica.etiqueta_color" weight="550"></dxo-font>
+                            <dxo-border [color]="parGrafica.etiqueta_color" visible="true" width="1"></dxo-border>
+                        </dxo-label>
+                    </dxi-series>
+
+                    <dxi-series *ngIf="grActual==2 && parGrafica.tipo_valor=='stackedBar'" [axis]="variable" type="scatter" [valueField]="variableefi_2" [name]="" color="transparent" [showInLegend]="false">
+                        <dxo-label [visible]="true" [backgroundColor]="parGrafica.etiqueta_fondo" overlappingBehavior="hide" position="inside" [customizeText]="calcularHora" displayMode="rotate" rotationAngle="270">
+                            <dxo-format
+                                [type]="formatoGraficoTiempo.tipo"
+                                [precision]="formatoGraficoTiempo.precision">
+                            </dxo-format>
+                            <dxo-font [size]="parGrafica.etiqueta_fuente" [color]="parGrafica.etiqueta_color" weight="550"></dxo-font>
+                            <dxo-border [color]="parGrafica.etiqueta_color" visible="true" width="1"></dxo-border>
+                        </dxo-label>
+                    </dxi-series>
+                           
+                    <!--<dxi-series *ngIf="grActual==2 && parGrafica.oee[1]=='S'" [axis]="variable" [type]="parGrafica.tipo_valorEFI" [valueField]="variableefi_2" [name]="variableefi_literal" [color]="parGrafica.colorEFI">
+                        <dxo-label [visible]="parGrafica.oee[4]=='S'" [backgroundColor]="parGrafica.etiqueta_fondo" overlappingBehavior="hide" position="inside">
+                            <dxo-format
+                                [type]="formatoGraficoTiempo.tipo"
+                                [precision]="formatoGraficoTiempo.precision">
+                            </dxo-format>
+                            <dxo-font [size]="parGrafica.etiqueta_fuente" [color]="parGrafica.etiqueta_color" weight="550"></dxo-font>
+                            <dxo-border [color]="parGrafica.etiqueta_color" visible="true" width="1"></dxo-border>
+                        </dxo-label>
+                    </dxi-series>-->
+                    
+                    <dxi-series *ngIf="(grActual==1 || parGrafica.orden==1) && parGrafica.grueso_spiline>0" axis="pct" type="spline" valueField="porcentaje" [name]="nombrePareto" [color]="parGrafica.color_spiline" [width]="parGrafica.grueso_spiline" backgroundColor="green">
+                        <dxo-label [visible]="parGrafica.etiqueta_mostrar=='S'" [backgroundColor]="parGrafica.etiqueta_fondo" [customizeText]="calcularPCT" overlappingBehavior="hide">
+                            <dxo-format
+                                type="fixedPoint"
+                                [precision]="0">
+                            </dxo-format>
+                            <dxo-font [size]="parGrafica.etiqueta_fuente" [color]="parGrafica.etiqueta_color" weight="550"></dxo-font>
+                            <dxo-border [color]="parGrafica.etiqueta_color" visible="true" width="1"></dxo-border>
+                        </dxo-label>
+                    </dxi-series>
+                    
+                    <dxi-value-axis [visualRange]="maxmin" [name]="variable" position="left" valueType="numeric">
+                        <dxo-title *ngIf="parGrafica.texto_y" [text]="parGrafica.texto_y">
+                            <dxo-font
+                                [size]="parGrafica.texto_y_fuente"
+                                [color]="parGrafica.color_letras"
+                                weight="550">
+                            </dxo-font>
+                        </dxo-title>
+                        <dxo-label
+                            [visible]="true" [customizeText]="calcularEscala">
+                            <dxo-format
+                                type="fixedPoint"
+                                precision="0">
+                            </dxo-format>
+                            <dxo-font
+                                [size]="parGrafica.etiqueta_fuente"
+                                [color]="parGrafica.color_letras"
+                                weight="550">
+                            </dxo-font>
+                        </dxo-label>
+                        <dxi-constant-line *ngIf="parGrafica.ver_esperado=='S'" [width]="parGrafica.grueso_esperado" [value]="parGrafica.valor_esperado" [color]="parGrafica.color_esperado">
+                            <dxo-label [text]="parGrafica.texto_esperado">
+                                <dxo-font
+                                    [size]="parGrafica.etiqueta_fuente"
+                                    [color]="parGrafica.color_letras"
+                                    weight="550">
+                                </dxo-font>
+                            </dxo-label>
+                        </dxi-constant-line>
+                    </dxi-value-axis>
+
+                    <dxi-value-axis name="pct" position="right" valueType="numeric" *ngIf="parGrafica.grueso_spiline>0">
+                        <dxo-title [text]="parGrafica.texto_z">
+                            <dxo-font [size]="parGrafica.texto_z_fuente" [color]="parGrafica.color_letras" weight="450"></dxo-font>
+                        </dxo-title>
+                        <dxo-label
+                            [visible]="true">
+                            <dxo-font
+                                [size]="parGrafica.etiqueta_fuente"
+                                [color]="parGrafica.color_letras"
+                                weight="550">
+                            </dxo-font>
+                            <dxo-format [type]="fixedPoint" [precision]="0"></dxo-format>
+                        </dxo-label>
+                    </dxi-value-axis>
+                    
+                    <dxo-common-series-settings
+                        [axis]="variable"
+                        [type]="parGrafica.tipo_valor"
+                        
+                        argumentField="nombre"
+                        [barPadding]="0.1"
+                        [ignoreEmptyPoints]="true"
+                        [valueField]="variable_2">
+                        <dxo-label [visible]="parGrafica.etiqueta_mostrar=='S'" [backgroundColor]="parGrafica.etiqueta_fondo" overlappingBehavior="hide">
+                            <dxo-format
+                                type="fixedPoint"
+                                [precision]="0">
+                            </dxo-format>
+                            <dxo-font [size]="parGrafica.etiqueta_fuente" [color]="parGrafica.etiqueta_color" weight="550"></dxo-font>
+                            <dxo-border [color]="parGrafica.etiqueta_color" visible="true" width="1"></dxo-border>
+                        </dxo-label>
+                    </dxo-common-series-settings>
+                    <dxo-common-axis-settings>
+                        <dxo-grid [width]="1" [color]="parGrafica.etiqueta_color"></dxo-grid>
+                    </dxo-common-axis-settings>
+                    <dxo-argument-axis>
+                        <dxo-label [overlappingBehavior]="parGrafica.overlap" [visible]="parGrafica.mostrar_argumentos=='S'">
+                            <dxo-font
+                                [size]="parGrafica.etiqueta_fuente"
+                                [color]="parGrafica.color_letras"
+                                weight="550">
+                            </dxo-font>
+                        </dxo-label>
+                        <dxo-title *ngIf="parGrafica.texto_x" [text]="parGrafica.texto_x">
+                            <dxo-font
+                                [size]="parGrafica.texto_x_fuente"
+                                [color]="parGrafica.color_letras"
+                                weight="550">
+                            </dxo-font>
+                        </dxo-title>
+                    </dxo-argument-axis>
+
+                    <dxo-crosshair
+                        [enabled]="true"
+                        [color]="parGrafica.etiqueta_color"
+                        [width]="2"
+                        dashStyle="dot">
+                        <dxo-label
+                            [visible]="true"
+                            [backgroundColor]="parGrafica.etiqueta_fondo">
+                            <dxo-format
+                                [type]="formatoGrafico.tipo"
+                                [precision]="formatoGrafico.precision">
+                            </dxo-format>
+                            <dxo-font
+                                [color]="parGrafica.etiqueta_color"
+                                [size]="parGrafica.etiqueta_fuente">
+                            </dxo-font>
+                            <dxo-border [color]="parGrafica.etiqueta_color" [visible]="true" width="1"></dxo-border>
+                        </dxo-label>
+                    </dxo-crosshair>
+                    <dxo-tooltip [enabled]="true"></dxo-tooltip>
+                    <dxo-loading-indicator [show]="true" text="Recuperando datos...">
+                        <dxo-font
+                            [color]="texto_boton"
+                            size="17">
+                        </dxo-font>
+                        <dxo-border [color]="parGrafica.etiqueta_color" [visible]="true" width="1"></dxo-border>
+                    </dxo-loading-indicator>
+                    
+                    <dxo-export [fileName]="nombreFile" [backgroundColor]="parGrafica.color_fondo" [enabled]="true" [printingEnabled]="false"></dxo-export>
+                    
+                    <dxo-zoom-and-pan argumentAxis="both"></dxo-zoom-and-pan>
+                    <dxo-scroll-bar  [visible]="true"></dxo-scroll-bar>
+                    <dxo-legend
+                        [visible]="parGrafica.ver_leyenda =='S'"
+                        [backgroundColor]="parGrafica.color_leyenda_fondo"
+                        verticalAlignment="top"
+                        horizontalAlignment="left">
+                        <dxo-title [text]="parGrafica.etiqueta_leyenda">
+                            <dxo-font
+                                [size]="parGrafica.etiqueta_fuente"
+                                [color]="parGrafica.color_leyenda"
+                                weight="550">
+                            </dxo-font>
+                        </dxo-title>
+                        <dxo-font
+                            [size]="parGrafica.etiqueta_fuente"
+                            [color]="parGrafica.color_leyenda"
+                            weight="450">
+                        </dxo-font>
+                        <dxo-border
+                            [color]="parGrafica.color_letras" visible="true" width="1" >
+                        </dxo-border>
+                        <dxo-margin left="30" right="30"></dxo-margin>
+                    </dxo-legend>
+                    
+                </dx-chart>
+            </div>
+
+            <div class="tabla" @esquema (@esquema.done)="salidaEfecto($event)" *ngIf="modelo==2">
+                <div class="registroCaja">
+                    <div class="alertaCaja" *ngIf="faltaMensaje" >
+                        <mat-icon class="iconPB_4" svgIcon="i_alerta"></mat-icon>
+                        <span class="alertaMensaje" [innerHTML]="faltaMensaje"></span>
+                    </div>
+                    <div class="registroGeneral">
+                        <div class="registroCampo">
+                            <div class="registroTitulo">1. Buscar una consulta guardada</div>    
+                            <mat-form-field class="cajaTexto_2">
+                                <mat-select [(ngModel)]="detalle.consulta" name="detalle.consulta" (selectionChange)="cConsulta($event)">
+                                    <mat-option *ngFor="let consulta of consultas; let i = index" [value]="consulta.id">{{ consulta.nombre }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                             
+                        </div>
+                        <div class="registroCampo" >
+                            <div class="registroTitulo">2. Nombre de la consulta</div>    
+                            <mat-form-field class="cajaTexto_2">
+                                <input matInput #txtNombre [(ngModel)]="detalle.nombre" maxlength="50" autocomplete="off" name="detalle.nombre"  #nombre ="ngModel" (input)="cambiando($event);error01=false; " required>
+                                <button mat-button *ngIf="detalle.nombre" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.nombre = '';cambiando();error01=true;">
+                                    <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                </button>
+                                <mat-hint class="pista" align="end">{{ nombre.value?.length || 0 }} de 50</mat-hint>
+                                <mat-hint *ngIf="error01" class="pistaError" align="start">Campo requerido</mat-hint>
+                            </mat-form-field>                            
+                            <span class="ayudaCampo_2">Si desea usar la consulta en otro momento debe guardarla, de lo contrario se guardará como la consulta predeterminada</span>       
+                        </div>
+
+                        <div class="registroCampo">
+                            <div class="registroTitulo" >3. Consulta por defecto</div>    
+                            <mat-form-field class="texto">
+                                <mat-select [(value)]="detalle.defecto" name="detalle.defecto" (selectionChange)=cambiando($event)>
+                                    <mat-option value="S">SI</mat-option>
+                                    <mat-option value="N">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <span class="ayudaCampo_2">Esta consulta se aplicará a todos los reportes y gráficas al iniciar su sesión</span>    
+                        </div>
+                            
+                        <div class="registroCampo">
+                            <div class="registroTitulo" >4. Período de tiempo </div>    
+                            <mat-form-field class="texto">
+                                <mat-select [(value)]="detalle.periodo" name="detalle.periodo" (selectionChange)=cambiando($event)>
+                                    <mat-option [value]="1">LO QUE VA DEL DÍA</mat-option>
+                                    <mat-option [value]="2">LO QUE VA DE SEMANA</mat-option>
+                                    <mat-option [value]="3">LO QUE VA DEL MES (MtD)</mat-option>
+                                    <mat-option [value]="4">LO QUE VA DEL AÑO (YtD)</mat-option>
+                                    <mat-option [value]="9">EL DÍA DE AYER</mat-option>
+                                    <mat-option [value]="5">LA SEMANA ANTERIOR</mat-option>
+                                    <mat-option [value]="6">EL MES ANTERIOR</mat-option>
+                                    <mat-option [value]="7">EL AÑO ANTERIOR</mat-option>
+                                    <mat-option [value]="8">Especificar una fecha</mat-option>
+                                 </mat-select>
+                            </mat-form-field>
+                            <span class="ayudaCampo_2">Todos los períodos excluyendo el último son dinámico, es decir, que cada vez que se ejecute la consulta se calcula la fecha</span>    
+                        </div> 
+
+                        <div class="registroCampo" [ngStyle]="{'color': detalle.periodo == '8'  ? 'var(--texto_boton)' : 'var(--texto_boton_inactivo)', 'border-color': detalle.periodo == '8' ? 'var(--borde_tarjeta)' : 'var(--texto_boton_inactivo)'}">
+                            <div class="registroTitulo">5. Especificar período estático</div>    
+                            <div class="columnas">
+                                <mat-form-field class="textoMitad" [style.width.%]="50">
+                                    <input #txtDesde matInput [(ngModel)]="detalle.desde" [matDatepicker]="picker1" name="detalle.desde" autocomplete="off" #desde1="ngModel" [disabled]="detalle.periodo != '8'" (input)="cambiando($event);error02=false;">
+                                    <mat-datepicker-toggle matSuffix [for]="picker1">
+                                    </mat-datepicker-toggle> 
+                                    <mat-datepicker #picker1 [disabled]="detalle.periodo != '8'"></mat-datepicker>   
+                                    <mat-hint *ngIf="error02" class="pistaError" align="start">Campo requerido</mat-hint>
+                                </mat-form-field>
+                                <mat-form-field class="textoMitad" [style.marginLeft.%]="2" [style.width.%]="48">
+                                    <input #txtDesde matInput [(ngModel)]="detalle.hasta" [matDatepicker]="picker2" name="detalle.hasta" autocomplete="off" #hasta1="ngModel" [disabled]="detalle.periodo != '8'" (input)="cambiando($event);error03=false;">
+                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle> 
+                                    <mat-datepicker #picker2 [disabled]="detalle.periodo != '8'"></mat-datepicker>   
+                                    <mat-hint *ngIf="error03" class="pistaError" align="start">Campo requerido</mat-hint>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="registroCampo">
+                            <div class="registroTitulo" >6. Permitir que otros usuarios usen esta consulta</div>    
+                            <mat-form-field class="texto">
+                                <mat-select [(value)]="detalle.publico" name="detalle.publico" (selectionChange)=cambiando($event)>
+                                    <mat-option value="S">SI</mat-option>
+                                    <mat-option value="N">No</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <span class="ayudaCampo_2">Los usuarios no podrán modificar esta consulta</span>    
+                        </div>
+
+                        <div class="registroCampo">
+                            <div class="registroTitulo">7. Transportes</div>    
+                            <mat-form-field class="texto">
+                                <mat-select [(ngModel)]="detalle.filtrolin" (selectionChange)="seleccion(1, $event);cambiando($event)">
+                                    <mat-option value="S">Todos los transportes</mat-option>
+                                    <mat-option value="N">Transportes de la lista</mat-option>
+                                    <div class="divisorP"></div>
+                                    <mat-option value="1">Seleccionar todas los Tansportes</mat-option>
+                                    <mat-option value="0">Deseleccionar todas los Tansportes</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <div class="cajaLista" [ngStyle]="{'border-color': detalle.filtrolin!='S' ? 'var(--borde_boton)' : 'var(--texto_boton_inactivo)'}">
+                                <mat-selection-list class="lista" #listaLineas [(ngModel)]="detalle.linea" name="detalle.linea" (click)="cambiando($event)" [disabled]="detalle.filtrolin=='S'">
+                                    <mat-list-option *ngFor="let linea of lineas; let i = index" [value]="linea.id" [selected]="linea.seleccionado==1" checkboxPosition="before">
+                                        <div class="columnaLista">
+                                            <div class="lineaLista">{{linea.nombre }}</div>
+                                        </div>
+                                    </mat-list-option>
+                                </mat-selection-list>
+                            </div>
+                            <span class="ayudaCampo_2">Transporte(s) para el filtro</span>             
+                        </div>
+
+                        <div class="registroCampo"  >
+                            <div class="registroTitulo">8. Vehículos</div>    
+                            <mat-form-field class="texto">
+                                <mat-select [(ngModel)]="detalle.filtromaq" (selectionChange)="seleccion(2, $event);cambiando($event)">
+                                    <mat-option value="S">Todos los Vehículos</mat-option>
+                                    <mat-option value="N">Vehículos de la lista</mat-option>
+                                    <div class="divisorP"></div>
+                                    <mat-option value="1">Seleccionar todos los Vehículos</mat-option>
+                                    <mat-option value="0">Deseleccionar todos los Vehículos</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <div class="cajaLista" [ngStyle]="{'border-color': detalle.filtromaq!='S' ? 'var(--borde_boton)' : 'var(--texto_boton_inactivo)'}">
+                                <mat-selection-list class="lista" #listaMaquinas [(ngModel)]="detalle.maquina" name="detalle.maquina" (click)="cambiando($event)" [disabled]="detalle.filtromaq=='S'">
+                                    <mat-list-option *ngFor="let maquina of maquinas; let i = index" [value]="maquina.id" [selected]="maquina.seleccionado==1" checkboxPosition="before">
+                                        <div class="columnaLista">
+                                            <div class="lineaLista">{{maquina.nombre }}</div>
+                                        </div>
+                                    </mat-list-option>
+                                </mat-selection-list>
+                            </div>
+                            <span class="ayudaCampo_2">Vehículo(s) para el filtro</span>     
+                        </div>
+
+                        <div class="registroCampo">
+                            <div class="registroTitulo">9. Áreas del dispositivo</div>    
+                            <mat-form-field class="texto">
+                                <mat-select [(ngModel)]="detalle.filtroare" (selectionChange)="seleccion(3, $event);cambiando($event)">
+                                    <mat-option value="S">Todas las áreas</mat-option>
+                                    <mat-option value="N">Áreas de la lista</mat-option>
+                                    <div class="divisorP"></div>
+                                    <mat-option value="1">Seleccionar todas las áreas</mat-option>
+                                    <mat-option value="0">Deseleccionar todas las áreas</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            
+                            <div class="cajaLista" [ngStyle]="{'border-color': detalle.filtroare!='S' ? 'var(--borde_boton)' : 'var(--texto_boton_inactivo)'}">
+                                <mat-selection-list class="lista" #listaAreas [(ngModel)]="detalle.area" name="detalle.area" (click)="cambiando($event)" [disabled]="detalle.filtroare=='S'">
+                                    <mat-list-option *ngFor="let area of areas; let i = index" [value]="area.id" [selected]="area.seleccionado==1" checkboxPosition="before">
+                                        <div class="columnaLista">
+                                            <div class="lineaLista">{{area.nombre }}</div>
+                                        </div>
+                                    </mat-list-option>
+                                </mat-selection-list>
+                            </div>
+                            <span class="ayudaCampo_2">Marque las área(s) para el filtro</span>   
+                        </div>
+
+                        <div class="registroCampo">
+                            <div class="registroTitulo">10. Tipos de vehículo</div>    
+                            <mat-form-field class="texto">
+                                <mat-select [(ngModel)]="detalle.filtrofal" (selectionChange)="seleccion(4, $event);cambiando($event)">
+                                    <mat-option value="S">Todos tipos de vehículo</mat-option>
+                                    <mat-option value="N">Tipos de vehículo</mat-option>
+                                    <div class="divisorP"></div>
+                                    <mat-option value="1">Seleccionar todos tipos de vehículo</mat-option>
+                                    <mat-option value="0">Deseleccionar todos tipos de vehículo</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            
+                            <div class="cajaLista" [ngStyle]="{'border-color': detalle.filtrofal!='S' ? 'var(--borde_boton)' : 'var(--texto_boton_inactivo)'}">
+                                <mat-selection-list class="lista" #listaFallas [(ngModel)]="detalle.falla" name="detalle.falla" (click)="cambiando($event)" [disabled]="detalle.filtrofal=='S'">
+                                    <mat-list-option *ngFor="let falla of fallas; let i = index" [value]="falla.id" [selected]="falla.seleccionado==1" checkboxPosition="before">
+                                        <div class="columnaLista">
+                                            <div class="lineaLista">{{falla.nombre }}</div>
+                                        </div>
+                                    </mat-list-option>
+                                </mat-selection-list>
+                            </div>
+                            <span class="ayudaCampo_2">Tipo(s) de vehículo para el filtro</span>   
+                        </div>
+
+                        <div class="registroCampo">
+                            <div class="registroTitulo">11. Tipos de carga</div>    
+                            <mat-form-field class="texto">
+                                <mat-select [(ngModel)]="detalle.filtrotec" (selectionChange)="seleccion(5, $event);cambiando($event)">
+                                    <mat-option value="S">Todos tipos de carga</mat-option>
+                                    <mat-option value="N">Tipos de carga de la lista</mat-option>
+                                    <div class="divisorP"></div>
+                                    <mat-option value="1">Seleccionar todos tipos de carga</mat-option>
+                                    <mat-option value="0">Deseleccionar todos tipos de carga</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            
+                            <div class="cajaLista" [ngStyle]="{'border-color': detalle.filtrotec!='S' ? 'var(--borde_boton)' : 'var(--texto_boton_inactivo)'}">
+                                <mat-selection-list class="lista" #listaTecnicos [(ngModel)]="detalle.tecnico" name="detalle.tecnico" (click)="cambiando($event)" [disabled]="detalle.filtrotec=='S'">
+                                    <mat-list-option *ngFor="let tecnico of tecnicos; let i = index" [value]="tecnico.id" [selected]="tecnico.seleccionado==1" checkboxPosition="before">
+                                        <div class="columnaLista">
+                                            <div class="lineaLista">{{tecnico.nombre }}</div>
+                                        </div>
+                                    </mat-list-option>
+                                </mat-selection-list>
+                            </div>
+                            <span class="ayudaCampo_2">Tipo(s) de carga para el filtro</span>   
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabla" cdkScrollable @esquema (@esquema.done)="salidaEfecto($event)" *ngIf="modelo==3">
+                <div class="registroCaja">
+                    <div class="alertaCaja" *ngIf="faltaMensaje" >
+                        <mat-icon class="iconPB_4" svgIcon="i_alerta"></mat-icon>
+                        <span class="alertaMensaje" [innerHTML]="faltaMensaje"></span>
+                    </div>
+                    <div class="registroGeneral">
+                        <div class="grupoTitulo">1. DATOS GENERALES DE LA GRÁFICA</div>    
+                        <div class="grupoCampos">
+                            
+                            <div class="registroCampoB">
+                                <div class="registroTitulo" [style.marginBottom.px]="10">1.0 Nombre original de la gráfica</div>    
+                                <div class="registroTitulo">{{ nGrafica }}</div>    
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo" >1.1 Visualizar la gráfica</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.visualizar" name="detalle.visualizar" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Agrega la gráfica a los botones de navegación</span>    
+                            </div>
+
+                            <div class="registroCampoP" *ngIf="grActual==1">
+                                <div class="registroTitulo" >1.2 Tipo de gráfica</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.tipo_principal" name="detalle.tipo_principal" (selectionChange)=cambiando($event)>
+                                        <mat-option value="B">Barras</mat-option>
+                                        <mat-option value="L">Línea</mat-option>
+                                        <mat-option value="A">Área</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique el tipo de gráfico</span>    
+                            </div>
+
+                            <div class="registroCampoP" *ngIf="grActual==2">
+                                <div class="registroTitulo" >1.2 Tipo de gráfica</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.tipo_principal" name="detalle.tipo_principal" (selectionChange)=cambiando($event)>
+                                        <mat-option value="B">Elementos separados</mat-option>
+                                        <mat-option value="S">Barra acumulativa (Stack)</mat-option>
+                                        <mat-option value="F">Barra completa (Full stack)</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique el tipo de gráfico</span>    
+                            </div>
+
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo" >1.3 Incluir valores cero</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.incluir_ceros" name="detalle.incluir_ceros" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique si se grafican los elementos con valor cero (sin valor)</span>    
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo" >1.4 Orden de los valores en la gráfica</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.orden_grafica" name="detalle.orden_grafica" (selectionChange)=cambiando($event)>
+                                        <mat-option value="M">Descendente</mat-option>
+                                        <mat-option value="N">Ascendente</mat-option>
+                                        <mat-option value="A">Alfabético</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique como se ordenarán los valores graficados</span>    
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo" >1.5 Resolución de solapamiento en el eje X</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.overlap" name="detalle.overlap" (selectionChange)=cambiando($event)>
+                                        <mat-option value="R">Rotar los textos</mat-option>
+                                        <mat-option value="S">Múltiples filas</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique como se resolverá el solapamiento de los textos en el eje X</span>    
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo" >1.6 Barras con diferentes colores</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.colores_multiples" name="detalle.colores_multiples" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique si desea ver cada barra con diferente color</span>    
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">1.7 Color de la barra de un sólo color</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.color_barra" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Especifique el color de la barra de un sólo color</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">1.8 Color del borde de la barra individual</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.color_barra_borde" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Especifique el color del borde de la barra de un sólo color</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">1.9 Color de los textos</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.color_letras" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Color general de los textos en la gráfica</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">1.10 Color de fondo general</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.color_fondo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Color del fondo de la gráfica en general</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">1.11 Color de fondo del área de las barras</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.color_fondo_barras" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Color del fondo de la gráfica del área de las barras</span>                                 
+                            </div>
+
+                            <div class="registroCampoP" *ngIf="grActual==1">
+                                <div class="registroTitulo" >1.12 Valor de la frecuencia de Pareto</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.orden" name="detalle.orden" (selectionChange)=cambiando($event)>
+                                        <mat-option value="0">Total tactos</mat-option>
+                                        <mat-option value="1">Tiempo del traslado</mat-option>
+                                        <mat-option value="2">Tiempo de la descarga</mat-option>
+                                        <mat-option value="3">Tiempo total (traslado y descarga)</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique que valor se graficará como frecuencia en el Pareto</span>    
+                            </div>
+
+                            <div class="registroCampoP" *ngIf="grActual==2">
+                                <div class="registroTitulo" >1.12 Visualizar el porcentaje de eficiencia</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.orden" name="detalle.orden" (selectionChange)=cambiando($event)>
+                                        <mat-option value="1">SI</mat-option>
+                                        <mat-option value="0">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique que valor se graficará como frecuencia en el Pareto</span>    
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">1.13 Tamaño de la línea {{ grActual==1 ? "porcentual de Pareto" : " de Eficiencia " }}</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.grueso_spiline" maxlength="2" min="1" max="10" autocomplete="off" name="detalle.grueso_spiline" #grueso_spiline="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">Expresado en pixeles</mat-hint>
+                                    <mat-hint class="pista" align="end">0=No mostrar</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el grosor de la línea {{ grActual==1 ? "porcentual de Pareto" : " de Eficiencia " }}</span>                                 
+                            </div>
+
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">1.14 Color de la línea {{ grActual==1 ? "porcentual de Pareto" : " de Eficiencia " }}</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.color_spiline" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Color de la línea {{ grActual==1 ? "porcentual de Pareto" : " de Eficiencia " }}</span>                                 
+                            </div>
+
+                            <div class="registroCampoP" *ngIf="grActual==1 && graficaActual==11">
+                                <div class="registroTitulo" >1.15 Agrupar por destino </div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.oee_nombreFTQ" name="detalle.oee_nombreFTQ" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique que valor se graficará como frecuencia en el Pareto</span>    
+                            </div>
+
+                            <div class="registroCampoLista" *ngIf="grActual==2">
+                                <div class="registroTitulo">1.15 Tiempos adicionales de eficiencia a graficar</div>    
+                                <!--<div class="columnaLista2">
+                                    <mat-checkbox  class="seleccionador" disableRipple [(ngModel)]="detalle.oee_selEFI"  checkboxPosition="before" (change)="cambiando()">
+                                        <div class="textoColor">Espera</div>                                                    
+                                    </mat-checkbox>
+
+                                    <mat-form-field class="cajaTexto_ind" floatLabel="never">
+                                        <input matInput [(ngModel)]="detalle.oee_nombreEFI" placeholder="Título" maxlength="20" autocomplete="off" name="detalle.oee_nombreEFI"  #tadic1 ="ngModel" (input)="cambiando($event)">
+                                        <button mat-button *ngIf="detalle.oee_nombreEFI" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.oee_nombreEFI = '';cambiando();">
+                                            <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                        </button>
+                                    </mat-form-field>
+                                    <mat-select class="selGraf" [(value)]="detalle.oee_tipoEFI" name="tipoEFI" (selectionChange)=cambiando($event)>
+                                        <mat-option value="B">Barra</mat-option>
+                                        <mat-option value="L">Línea</mat-option>
+                                    </mat-select>
+                                    <mat-select class="selGraf2" [(value)]="detalle.oee_etiEFI" name="etiEFI" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">Ver etiqueta</mat-option>
+                                        <mat-option value="N">Sin etiqueta</mat-option>
+                                    </mat-select>
+                                    <dx-color-box class="colores2" [(value)]="detalle.colorEFI" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                    
+                                </div>-->
+                                <div class="columnaLista2">
+                                    <mat-checkbox  class="seleccionador" [(ngModel)]="detalle.oee_selFTQ" checkboxPosition="before" (change)="cambiando()">
+                                        <div class="textoColor">Tránsito</div>                                                    
+                                    </mat-checkbox>
+                                    <mat-form-field class="cajaTexto_ind" floatLabel="never">
+                                        <input matInput [(ngModel)]="detalle.oee_nombreFTQ" placeholder="Título" maxlength="20" autocomplete="off" name="detalle.oee_nombreFTQ"  #oee_nombreFTQ ="ngModel" (input)="cambiando($event)">
+                                        <button mat-button *ngIf="detalle.oee_nombreFTQ" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.oee_nombreFTQ = '';cambiando();">
+                                            <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                        </button>
+                                    </mat-form-field>
+                                    <mat-select class="selGraf" [(value)]="detalle.oee_tipoFTQ" name="tipoFTQ" (selectionChange)=cambiando($event)>
+                                        <mat-option value="B">Barra</mat-option>
+                                        <mat-option value="L">Línea</mat-option>
+                                    </mat-select>
+                                    <mat-select class="selGraf2" [(value)]="detalle.oee_etiFTQ" name="etiFTQ" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">Ver etiqueta</mat-option>
+                                        <mat-option value="N">Sin etiqueta</mat-option>
+                                    </mat-select>
+                                    <dx-color-box class="colores2" [(value)]="detalle.colorFTQ" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                    
+                                </div>
+                                <div class="columnaLista2">
+                                    <mat-checkbox  class="seleccionador" [(ngModel)]="detalle.oee_selDIS" checkboxPosition="before" (change)="cambiando()">
+                                        <div class="textoColor">Descarga</div>                                                    
+                                    </mat-checkbox>
+                                    
+                                    <mat-form-field class="cajaTexto_ind" floatLabel="never">
+                                        <input matInput [(ngModel)]="detalle.oee_nombreDIS" placeholder="Título" maxlength="20" autocomplete="off" name="detalle.oee_nombreDIS"  #oee_nombreDIS ="ngModel" (input)="cambiando($event)">
+                                        <button mat-button *ngIf="detalle.oee_nombreDIS" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.oee_nombreDIS = '';cambiando();">
+                                            <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                        </button>
+                                    </mat-form-field>
+                                        <mat-select class="selGraf" [(value)]="detalle.oee_tipoDIS" name="tipoDIS" (selectionChange)=cambiando($event)>
+                                        <mat-option value="B">Barra</mat-option>
+                                        <mat-option value="L">Línea</mat-option>
+                                    </mat-select>
+                                    <mat-select class="selGraf2" [(value)]="detalle.oee_etiDIS" name="etiDIS" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">Ver etiqueta</mat-option>
+                                        <mat-option value="N">Sin etiqueta</mat-option>
+                                    </mat-select>
+                                    <dx-color-box class="colores2" [(value)]="detalle.colorDIS" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                </div>
+                                <span class="ayudaCampo_2">Marque los elementos adicionales que se graficarán con el Tiempo total del tacto</span>    
+                            </div>
+
+                            <div class="registroCampoP" *ngIf="grActual==2">
+                                <div class="registroTitulo" >1.16 Tipo de cálculo a mostrar</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.mostrar_tabla" name="detalle.mostrar_tabla" (selectionChange)=cambiando($event)>
+                                        <mat-option value="0">Total tiempo</mat-option>
+                                        <mat-option value="1">Promedio de tiempo</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique que cálculo se aplicará para el tiempo (horas)</span>    
+                            </div>
+
+                           
+                        </div>
+                        <div class="grupoTitulo">2. TITULO Y SUBTITULO DE LA GRÁFICA</div>    
+                        <div class="grupoCampos">
+                        
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">2.1 Título de la gráfica</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput [(ngModel)]="detalle.titulo" maxlength="100" autocomplete="off" name="detalle.titulo"  #titulo ="ngModel" (input)="cambiando($event)">
+                                    <button mat-button *ngIf="detalle.titulo" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.titulo = '';cambiando();">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ titulo.value?.length || 0 }} de 100</mat-hint>
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Indique el título que aparecerá en la gráfica</span>       
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">2.2 Tamaño de la fuente </div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.titulo_fuente" maxlength="2" min="4" max="50" autocomplete="off" name="detalle.titulo_fuente" #titulo_fuente="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el tamaño de la fuente para el título</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">2.3 Subtítulo de la gráfica</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput [(ngModel)]="detalle.sub_titulo" maxlength="100" autocomplete="off" name="detalle.sub_titulo"  #sub_titulo ="ngModel" (input)="cambiando($event)">
+                                    <button mat-button *ngIf="detalle.sub_titulo" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.sub_titulo = '';cambiando();">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ sub_titulo.value?.length || 0 }} de 100</mat-hint>
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Indique el título que aparecerá en la gráfica</span>       
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">2.4 Tamaño de la fuente </div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.subtitulo_fuente" maxlength="2" min="4" max="50" autocomplete="off" name="detalle.subtitulo_fuente" #subtitulo_fuente="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el tamaño de la fuente para el subtítulo</span>                                 
+                            </div> 
+                        </div>
+
+                        <div class="grupoTitulo">3. TEXTO EN LOS EJES DE LA GRÁFICA</div>    
+                        <div class="grupoCampos">
+                        
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">3.1 Texto en el eje X (abajo)</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput [(ngModel)]="detalle.texto_x" maxlength="100" autocomplete="off" name="detalle.texto_x"  #texto_x ="ngModel" (input)="cambiando($event)">
+                                    <button mat-button *ngIf="detalle.texto_x" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.texto_x = '';cambiando();">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ texto_x.value?.length || 0 }} de 100</mat-hint>
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Indique el texto que aparecerá la parte inferior de la gráfica</span>       
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">3.2 Tamaño de la fuente </div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.texto_x_fuente" maxlength="2" min="4" max="50" autocomplete="off" name="detalle.texto_x_fuente" #texto_x_fuente="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el tamaño de la fuente para el título</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">3.3 Texto en el eje Y (izquierda)</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput [(ngModel)]="detalle.texto_y" maxlength="100" autocomplete="off" name="detalle.texto_y"  #texto_y ="ngModel" (input)="cambiando($event)">
+                                    <button mat-button *ngIf="detalle.texto_y" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.texto_y = '';cambiando();">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ texto_y.value?.length || 0 }} de 100</mat-hint>
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Indique el texto que aparecerá la parte inferior de la gráfica</span>       
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">3.4 Tamaño de la fuente </div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.texto_y_fuente" maxlength="2" min="4" max="50" autocomplete="off" name="detalle.texto_y_fuente" #texto_y_fuente="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el tamaño de la fuente para el título</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">3.5 Texto en el eje Z (derecha)</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput [(ngModel)]="detalle.texto_z" maxlength="100" autocomplete="off" name="detalle.texto_z"  #texto_z ="ngModel" (input)="cambiando($event)">
+                                    <button mat-button *ngIf="detalle.texto_z" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.texto_z = '';cambiando();">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ texto_z.value?.length || 0 }} de 100</mat-hint>
+                                    <mat-hint class="pista" align="start">Sólo aplica en Pareto</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Indique el texto que aparecerá la parte derecha de la gráfica</span>       
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">3.6 Tamaño de la fuente </div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.texto_z_fuente" maxlength="2" min="4" max="50" autocomplete="off" name="detalle.texto_z_fuente" #texto_z_fuente="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el tamaño de la fuente para el título</span>                                 
+                            </div>
+                        </div>
+
+                        <div class="grupoTitulo">4. MOSTRAR ETIQUETAS EN LA GRÁFICA</div>    
+                        <div class="grupoCampos">
+                        
+                            <div class="registroCampoP">
+                                <div class="registroTitulo" >4.1 Mostrar etiquetas</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.etiqueta_mostrar" name="detalle.etiqueta_mostrar" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique si desea mostrar etiquetas en la gráfica</span>    
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">4.2 Tamaño de la fuente </div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.etiqueta_fuente" maxlength="2" min="4" max="50" autocomplete="off" name="detalle.etiqueta_fuente" #etiqueta_fuente="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el tamaño de la fuente para las etiquetas</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">4.3 Color del texto</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.etiqueta_color" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Color del texto de las etiquetas</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">4.4 Color del fondo</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.etiqueta_fondo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Color del fondo de las etiquetas</span>                                 
+                            </div>
+                            
+                        </div>
+                        <div class="grupoTitulo">5. TAMAÑO DE LA GRÁFICA Y MARGENES</div>    
+                        <div class="grupoCampos">
+                        
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">5.1 Alto de la gráfica </div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.alto" maxlength="6" min="100" max="999999" autocomplete="off" name="detalle.alto" #alto="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">0=Automático</mat-hint>
+                                    <mat-hint class="pista" align="end">Expresado en pixeles</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el tamaño de la gráfica (alto)</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">5.2 Ancho de la gráfica </div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.ancho" maxlength="6" min="100" max="999999" autocomplete="off" name="detalle.ancho" #ancho="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">0=Automático</mat-hint>
+                                    <mat-hint class="pista" align="end">Expresado en pixeles</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el tamaño de la gráfica (ancho)</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">5.3 Margen superior</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.margen_arriba" maxlength="6" min="100" max="999999" autocomplete="off" name="detalle.margen_arriba" #margen_arriba="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="end">Expresado en pixeles</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Espacio del borde superior</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">5.4 Margen izquierdo</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.margen_izquierda" maxlength="6" min="100" max="999999" autocomplete="off" name="detalle.margen_izquierda" #margen_izquierda="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="end">Expresado en pixeles</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Espacio del borde izquierdo</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">5.5 Margen inferior</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.margen_abajo" maxlength="6" min="100" max="999999" autocomplete="off" name="detalle.margen_abajo" #margen_abajo="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="end">Expresado en pixeles</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Espacio del borde inferior</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">5.6 Margen derecho</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.margen_derecha" maxlength="6" min="100" max="999999" autocomplete="off" name="detalle.margen_derecha" #margen_derecha="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="end">Expresado en pixeles</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Espacio del borde derecho</span>                                 
+                            </div>
+                            
+                        </div>
+
+                        <div class="grupoTitulo">6. CONSOLIDADOS Y SOBRECARGA DE LA GRÁFICA</div>    
+                        <div class="grupoCampos">
+
+
+                            <!--<div class="registroCampoLista">
+                                <div class="registroTitulo">6.1 Elementos adicionales a graficar (no aplica para Pareto)</div>    
+                                <div class="lista2">
+                                    <div class="columnaLista2">
+                                        <mat-select class="seleccionador_ind" [(value)]="detalle.adic1" name="detalle.adi1" (selectionChange)=cambiando($event)>
+                                            <mat-option value="0">N/A</mat-option>
+                                            <mat-option value="1">Planta</mat-option>
+                                            <mat-option value="2">YtD</mat-option>
+                                            <mat-option value="3">MtD</mat-option>
+                                            <mat-option value="4">Año ant</mat-option>
+                                            <mat-option value="5">Mes ant</mat-option>
+                                            <mat-option value="6">Mes/Año ant</mat-option>
+                                        </mat-select>
+                                        <mat-form-field class="cajaTexto_ind" floatLabel="never">
+                                            <input matInput [(ngModel)]="detalle.tadic1" placeholder="Título" maxlength="20" autocomplete="off" name="detalle.tadic1"  #tadic1 ="ngModel" (input)="cambiando($event)">
+                                            <button mat-button *ngIf="detalle.tadic1" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.tadic1 = '';cambiando();">
+                                                <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                        <dx-color-box class="colores_ind" [(value)]="detalle.coladic1" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                    </div>
+                                    <div class="columnaLista2">
+                                        <mat-select class="seleccionador_ind"  [(value)]="detalle.adic2" name="detalle.adi2" (selectionChange)=cambiando($event)>
+                                            <mat-option value="0">N/A</mat-option>
+                                            <mat-option value="1">Planta</mat-option>
+                                            <mat-option value="2">YtD</mat-option>
+                                            <mat-option value="3">MtD</mat-option>
+                                            <mat-option value="4">Año ant</mat-option>
+                                            <mat-option value="5">Mes ant</mat-option>
+                                            <mat-option value="6">Mes/Año ant</mat-option>
+                                        </mat-select>
+                                        <mat-form-field class="cajaTexto_ind" floatLabel="never">
+                                            <input matInput [(ngModel)]="detalle.tadic2" placeholder="Título" maxlength="20" autocomplete="off" name="detalle.tadic2"  #tadic2 ="ngModel" (input)="cambiando($event)">
+                                            <button mat-button *ngIf="detalle.tadic2" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.tadic2 = '';cambiando();">
+                                                <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                        <dx-color-box class="colores_ind" [(value)]="detalle.coladic2" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                    </div>
+                                    <div class="columnaLista2">
+                                        <mat-select class="seleccionador_ind" [(value)]="detalle.adic3" name="detalle.adi3" (selectionChange)=cambiando($event)>
+                                            <mat-option value="0">N/A</mat-option>
+                                            <mat-option value="1">Planta</mat-option>
+                                            <mat-option value="2">YtD</mat-option>
+                                            <mat-option value="3">MtD</mat-option>
+                                            <mat-option value="4">Año ant</mat-option>
+                                            <mat-option value="5">Mes ant</mat-option>
+                                            <mat-option value="6">Mes/Año ant</mat-option>
+                                        </mat-select>
+                                        <mat-form-field class="cajaTexto_ind" floatLabel="never">
+                                            <input matInput [(ngModel)]="detalle.tadic3" placeholder="Título" maxlength="20" autocomplete="off" name="detalle.tadic3"  #tadic3 ="ngModel" (input)="cambiando($event)">
+                                            <button mat-button *ngIf="detalle.tadic3" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.tadic3 = '';cambiando();">
+                                                <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                        <dx-color-box class="colores_ind" [(value)]="detalle.coladic3" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                    </div>
+                                    <div class="columnaLista2">
+
+                                        <mat-select class="seleccionador_ind" [(value)]="detalle.adic4" name="detalle.adi4" (selectionChange)=cambiando($event)>
+                                            <mat-option value="0">N/A</mat-option>
+                                            <mat-option value="1">Planta</mat-option>
+                                            <mat-option value="2">YtD</mat-option>
+                                            <mat-option value="3">MtD</mat-option>
+                                            <mat-option value="4">Año ant</mat-option>
+                                            <mat-option value="5">Mes ant</mat-option>
+                                            <mat-option value="6">Mes/Año ant</mat-option>
+                                        </mat-select>
+                                        <mat-form-field class="cajaTexto_ind" floatLabel="never">
+                                            <input matInput [(ngModel)]="detalle.tadic4" placeholder="Título" maxlength="20" autocomplete="off" name="detalle.tadic4"  #tadic4 ="ngModel" (input)="cambiando($event)">
+                                            <button mat-button *ngIf="detalle.tadic4" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.tadic4 = '';cambiando();">
+                                                <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                        <dx-color-box class="colores_ind" [(value)]="detalle.coladic4" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                    </div>
+                                    <div class="columnaLista2">
+                                        <mat-select class="seleccionador_ind" [(value)]="detalle.adic5" name="detalle.adi5" (selectionChange)=cambiando($event)>
+                                            <mat-option value="0">N/A</mat-option>
+                                            <mat-option value="1">Planta</mat-option>
+                                            <mat-option value="2">YtD</mat-option>
+                                            <mat-option value="3">MtD</mat-option>
+                                            <mat-option value="4">Año ant</mat-option>
+                                            <mat-option value="5">Mes ant</mat-option>
+                                            <mat-option value="6">Mes/Año ant</mat-option>
+                                        </mat-select>
+                                        <mat-form-field class="cajaTexto_ind" floatLabel="never">
+                                            <input matInput [(ngModel)]="detalle.tadic5" placeholder="Título"  maxlength="20" autocomplete="off" name="detalle.tadic5"  #tadic5 ="ngModel" (input)="cambiando($event)">
+                                            <button mat-button *ngIf="detalle.tadic5" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.tadic5 = '';cambiando();">
+                                                <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                        <dx-color-box class="colores_ind" [(value)]="detalle.coladic5" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                    </div>
+                                    <div class="columnaLista2">
+                                        <mat-select class="seleccionador_ind" [(value)]="detalle.adic6" name="detalle.adi6" (selectionChange)=cambiando($event)>
+                                            <mat-option value="0">N/A</mat-option>
+                                            <mat-option value="1">Planta</mat-option>
+                                            <mat-option value="2">YtD</mat-option>
+                                            <mat-option value="3">MtD</mat-option>
+                                            <mat-option value="4">Año ant</mat-option>
+                                            <mat-option value="5">Mes ant</mat-option>
+                                            <mat-option value="6">Mes/Año ant</mat-option>
+                                        </mat-select>
+                                        <mat-form-field class="cajaTexto_ind" floatLabel="never">
+                                            <input matInput [(ngModel)]="detalle.tadic6" placeholder="Título" maxlength="20" autocomplete="off" name="detalle.adic6"  #adic6 ="ngModel" (input)="cambiando($event)">
+                                            <button mat-button *ngIf="detalle.tadic6" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.tadic6 = '';cambiando();">
+                                                <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                        <dx-color-box class="colores_ind" [(value)]="detalle.coladic6" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                    </div>
+                                </div>
+                                <span class="ayudaCampo_2">Marque los elementos adicionales a graficar (esta funcionalidad puede ralentizar la gráfica)</span>    
+                            </div>-->
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">6.1 Máximo de items a graficar</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.maximo_barras" maxlength="2" min="2" max="99" autocomplete="off" name="detalle.maximo_barras" #maximo_barras="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">0=Ilimitado</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el máximo de barras a considerar</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">6.2 Máximo de valores a graficar (porcentaje)</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.maximo_barraspct" maxlength="2" min="0" max="99" autocomplete="off" name="detalle.maximo_barraspct" #maximo_barraspct="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">0=Ilimitado</mat-hint>
+                                    <mat-hint class="pista" align="end">Expresado en %</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el máximo de valor porcentual a considerar</span>                                 
+                            </div>
+                        
+                            <div class="registroCampoP">
+                                <div class="registroTitulo" >6.3 Agrupar los valores despreciados</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.agrupar" name="detalle.agrupar" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Esta consulta se aplicará a todos los reportes y gráficas al iniciar su sesión</span>    
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">6.4 Texto para los valores agrupados</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput [(ngModel)]="detalle.agrupar_texto" maxlength="30" autocomplete="off" name="detalle.agrupar_texto"  #agrupar_texto ="ngModel" (input)="cambiando($event)">
+                                    <button mat-button *ngIf="detalle.agrupar_texto" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.agrupar_texto = '';cambiando();">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ agrupar_texto.value?.length || 0 }} de 30</mat-hint>
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Indique el texto que aparecerá en la barra de los valores agrupados</span>       
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo" >6.5 Posición de los items agrupados</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.agrupar_posicion" name="detalle.agrupar_posicion" (selectionChange)=cambiando($event)>
+                                        <mat-option value="P">Primer item de la gráfica</mat-option>
+                                        <mat-option value="F">Último item de la gráfica</mat-option>
+                                        <mat-option value="N">Ordenado por de la gráfica</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique la posición de la barra de valores agrupados</span>    
+                            </div>
+    
+                            
+                        </div>
+                        <div class="grupoTitulo">7. LEYENDA DE LA GRÁFICA</div>    
+                        <div class="grupoCampos">
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo" >7.1 Mostrar leyenda</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.ver_leyenda" name="detalle.ver_leyenda" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique si desea mostrar una leyenda en la gráfica</span>    
+                            </div>
+
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">7.2 Texto para el título de la leyenda</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput [(ngModel)]="detalle.etiqueta_leyenda" maxlength="30" autocomplete="off" name="detalle.etiqueta_leyenda"  #etiqueta_leyenda ="ngModel" (input)="cambiando($event)">
+                                    <button mat-button *ngIf="detalle.etiqueta_leyenda" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.etiqueta_leyenda = '';cambiando();">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ etiqueta_leyenda.value?.length || 0 }} de 30</mat-hint>
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Indique el texto que aparecerá en el título de la leyenda</span>       
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">7.3 Color del texto</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.color_leyenda" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Color del texto para la leyenda</span>                                 
+                            </div>
+    
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">7.4 Color del fondo</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.color_leyenda_fondo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Color del fondo para la leyenda</span>                                 
+                            </div>
+
+                        </div>
+
+                        <div class="grupoTitulo">8. VALOR ESPERADO</div>    
+                        <div class="grupoCampos">
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo" >8.1 Mostrar la línea del valor esperado</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.ver_esperado" name="detalle.ver_esperado" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique si desea mostrar una leyenda en la gráfica</span>    
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">8.2 Valor esperado a mostrar</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.valor_esperado" maxlength="2" min="0" max="99" autocomplete="off" name="detalle.valor_esperado" #valor_esperado="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="end">15 enteros y 10 decimales</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el valor esperado a mostrar en el gráfico</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">8.3 Tamaño la línea del valor esperado </div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 type="number" [(ngModel)]="detalle.grueso_esperado" maxlength="2" min="1" max="10" autocomplete="off" name="detalle.grueso_esperado" #grueso_esperado="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">Expresado en pixeles</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Indique el grosor de la línea del valor esperado</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">8.4 Color de la línea del valor esperado</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.color_esperado" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Color de la línea del valor esperado</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">8.5 Texto para el valor esperado</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput [(ngModel)]="detalle.texto_esperado" maxlength="30" autocomplete="off" name="detalle.texto_esperado"  #texto_esperado ="ngModel" (input)="cambiando($event)">
+                                    <button mat-button *ngIf="detalle.texto_esperado" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.texto_esperado = '';cambiando();">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ texto_esperado.value?.length || 0 }} de 30</mat-hint>
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Indique el texto que aparecerá en la línea del valor esperado</span>       
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo" >8.6 Cambiar el color del elemento de acuerdo al valor esperado</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.dividir_colores" name="detalle.dividir_colores" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Los colores reemplazarán los colores predeterminados de los elementos de la gráfica</span>    
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">8.7 Color de los elementos que esten por encima del valor esperado</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.color_alto" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Seleccione el color de los elementos superiores al valor esperado</span>                                 
+                            </div>
+
+                            <div class="registroCampoP">
+                                <div class="registroTitulo">8.8 Color de los elementos que esten por debajo del valor esperado</div>    
+                                <dx-color-box class="colores" [(value)]="detalle.color_bajo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando($event)" (input)="cambiando($event)"></dx-color-box>
+                                <span class="ayudaCampo_2">Seleccione el color de los elementos inferiores al valor esperado</span>                                 
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="subir" *ngIf="verIrArriba" @arriba>
+            <button class="subirBoton" mat-flat-button (click)="irArriba()" [matTooltip]="irArribaTT" matTooltipClass = "toolTip">
+                <mat-icon class="subirIcono">keyboard_arrow_up</mat-icon>
+            </button>
+        </div>
+    </div>
+</div> 

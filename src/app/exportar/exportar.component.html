@@ -1,0 +1,335 @@
+
+<div id="todo" class="mat-typography">
+        <div class="pantallaError"   *ngIf="pantalla==1">
+            <div class="cabeceraMensaje" >{{ errorTitulo }}</div>
+            <div class="mensaje" [innerHTML]="errorMensaje"></div>
+        </div>
+        <div class="catalogos">
+            <div class="cabecera">
+                <div class="derechita">
+                    <button class="boton regreso" mat-button (mouseover)="lineaSel=true;" (mouseout)="lineaSel=false;" [ngClass]="{botHover: lineaSel}" (click)="descargarInfo(0)" *ngIf="graficando">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_descargar"></mat-icon>
+                        <div class="texto_d">Descargar</div> 
+                    </button>
+                    <button class="boton regreso2" mat-button (mouseover)="apagarSel=true;" (mouseout)="apagarSel=false;" [ngClass]="{botHover: apagarSel}" (click)="cancelarTodas()" *ngIf="!verTop" [disabled]="registros.length==0">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_cancelar"></mat-icon>
+                        <div class="texto_d">Terminar todas</div> 
+                    </button>
+                    <button class="boton regreso3" mat-button (mouseover)="filtrarC=true;" (mouseout)="filtrarC=false;" [ngClass]="{botHover: filtrarC}" (click)="filtrar()" *ngIf="verTop && !filtrando" [matTooltip] = "ayuda01" matTooltipClass = "toolTip" matTooltipShowDelay = "100">
+                        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_filtro" ></mat-icon>
+                        <div class="texto_d">Filtrar</div>
+                    </button>
+                </div>
+                <div class="columnas" *ngIf="filtrando">
+                    <div class="izquierda">
+                        <button class="boton regreso3 botTomado" mat-button (mouseover)="bot1Sel=true;" (mouseout)="bot1Sel=false;" [ngClass]="{ botHover: bot1Sel }" (click)="regresar()" >
+                            <mat-icon class="iconoBarras iconPB_2" svgIcon="i_regresar"></mat-icon>
+                            <div class="texto">Regresar</div> 
+                        </button>
+                    </div>
+                    <div class="derechita">
+                        <button class="boton regreso3" mat-button (mouseover)="aplicarSel=true;" (mouseout)="aplicarSel=false;" [ngClass]="{botHover: aplicarSel}" (click)="guardar(0)">
+                            <mat-icon class="conoBarras iconPB_2" svgIcon="in_seleccionado"></mat-icon>
+                            <div class="texto">Aplicar</div>
+                        </button>
+                        <mat-divider class="divisorV" [vertical]="true"></mat-divider>
+                        <button class="boton regreso3" mat-button (mouseover)="guardarSel=true;" (mouseout)="guardarSel=false;" [ngClass]="{botHover: guardarSel}" (click)="guardar(1)" [disabled]="!botGuar">
+                            <mat-icon class="conoBarras iconPB_2" svgIcon="i_guardar"></mat-icon>
+                            <div class="texto">Guardar</div>
+                        </button>
+                        <button class="boton regreso3" mat-button (mouseover)="bot4Sel=true;" (mouseout)="bot4Sel=false;" [ngClass]="{botHover: bot4Sel}" (click)="cancelar()" [disabled]="!botCan">
+                            <mat-icon class="iconoBarras iconPB_2" svgIcon="i_cancelar" ></mat-icon>
+                            <div class="texto">Cancelar</div>
+                        </button>
+                        <button class="boton regreso3" mat-button (mouseover)="bot7Sel=true;" (mouseout)="bot7Sel=false;" [ngClass]="{botHover: bot7Sel}" (click)="eliminarConsulta()" [disabled]="!botElim">
+                            <mat-icon class="iconoBarras iconPB_2" svgIcon="i_eliminar" ></mat-icon>
+                            <div class="texto">Eliminar</div>
+                        </button>
+                    </div>
+                </div>
+                
+                
+            </div>
+            <div class="contenedorScroll" cdkScrollable>
+                
+                <div class="tabla" @esquema (@esquema.done)="salidaEfecto($event)" *ngIf="modelo==1">
+                    <div class="registroCampo">
+                        <div class="registroTitulo" >1. Reporte a exportar</div>    
+                        <mat-form-field class="texto">
+                            <mat-select [(value)]="reporteSel" name="reporteSel">
+                                <mat-option [value]="1">Reporte de tactos</mat-option>
+                                <mat-option [value]="2">LOG de eventos del sistema</mat-option>
+                                <mat-option [value]="3">Alarmas generadas por el sistema</mat-option>
+                                
+                            </mat-select>
+                        </mat-form-field>
+                        <span class="ayudaCampo_2">Seleccione el reporte que desea exportar</span>    
+                    </div>
+                </div>
+
+                <div class="detalle" @esquema (@esquema.done)="salidaEfecto($event)" *ngIf="modelo==3">
+                    <div class="ayudaCampo" *ngIf="registros.length==0 && listoMostrar">No hay alarmas activas</div>
+                    <div class="contenido" @esquema_del (@esquema_del.start)="mostrar(0)" (@esquema_del.done)="mostrar(1)"  *ngFor="let registro of registros; let i = index" >
+                        <button class="tarjeta registro" mat-button (mouseover)="arreHover[i]=true;" (mouseout)="arreHover[i]=false;" (click)="inactivar(i)" [ngClass]="{ tarAlarmada: registro.fase > 10 }">
+                            <div class="doble_titulo">
+                                <div class="textoTar" *ngIf="registro.evento==101">Tiempo de espera exced.</div>
+                                <div class="textoTar" *ngIf="registro.evento==102">Tiempo de traslado exced.</div>
+                                <div class="textoTar" *ngIf="registro.evento==103">Tiempo de descarga exced.</div>
+                                <div class="textoTar" *ngIf="registro.evento==104">Tiempo preasignado exced.</div>
+                                <div *ngIf="registro.fase>10" class="derecha"><div class="escalamiento">{{ registro.fase - 10 > 0 ? registro.fase - 10 : 0 }}</div></div>
+                            </div>
+                            <div class="divisorP"></div>
+                            <div class="doble_t">
+                                <div class="doble_s">                        
+                                    <div class="valor">{{ registro.placa }}</div>
+                                    <div class="titulo">Vehículo</div>
+                                </div>
+                                <div class="doble_s">                        
+                                    <div class="valor">{{ registro.ndestino }}</div>
+                                    <div class="titulo">Destino</div>
+                                </div>
+                            </div>
+                            <div class="doble_s" [style.marginTop.px]="5">                        
+                                <div class="valor">{{ registro.ntransporte }}</div>
+                                <div class="titulo">Transporte</div>
+                            </div>
+                            <div class="doble_s">                                         
+                                <div class="valor">{{ registro.narea }}</div>
+                                <div class="titulo">Area asociada al beeper</div>
+                            </div>
+                              <div class="divisorP"></div>
+                            <div class="doble_t">
+                                <div class="doble_s">                        
+                                    <div class="valor">{{ registro.inicio | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+                                    <div class="titulo">Fecha de incio</div>
+                                </div>
+                                <div class="doble_f" [style.marginLeft.px]="10"  >                        
+                                    <div class="valor_2">{{ arreTiempos[i] }}</div>
+                                    <div class="titulo_2">Tiempo</div>
+                                </div>
+                            </div>  
+                    
+                        </button>
+                    </div>                
+                </div>
+    
+
+                <div class="tabla" @esquema (@esquema.done)="salidaEfecto($event)" *ngIf="modelo==2">
+                    <div class="registroCaja">
+                        <div class="alertaCaja" *ngIf="faltaMensaje" >
+                            <mat-icon class="iconPB_4" svgIcon="i_alerta"></mat-icon>
+                            <span class="alertaMensaje" [innerHTML]="faltaMensaje"></span>
+                        </div>
+                        <div class="registroGeneral">
+                            <div class="registroCampo">
+                                <div class="registroTitulo">1. Buscar una consulta guardada</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <mat-select [(ngModel)]="detalle.consulta" name="detalle.consulta" (selectionChange)="cConsulta($event)">
+                                        <mat-option *ngFor="let consulta of consultas; let i = index" [value]="consulta.id">{{ consulta.nombre }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                 
+                            </div>
+                            <div class="registroCampo" >
+                                <div class="registroTitulo">2. Nombre de la consulta</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtNombre [(ngModel)]="detalle.nombre" maxlength="50" autocomplete="off" name="detalle.nombre"  #nombre ="ngModel" (input)="cambiando($event);error01=false; " required>
+                                    <button mat-button *ngIf="detalle.nombre" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.nombre = '';cambiando();error01=true;">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ nombre.value?.length || 0 }} de 50</mat-hint>
+                                    <mat-hint *ngIf="error01" class="pistaError" align="start">Campo requerido</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Si desea usar la consulta en otro momento debe guardarla, de lo contrario se guardará como la consulta predeterminada</span>       
+                            </div>
+    
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >3. Consulta por defecto</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.defecto" name="detalle.defecto" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Esta consulta se aplicará a todos los reportes y gráficas al iniciar su sesión</span>    
+                            </div>
+                                
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >4. Período de tiempo </div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.periodo" name="detalle.periodo" (selectionChange)=cambiando($event)>
+                                        <mat-option [value]="1">LO QUE VA DEL DÍA</mat-option>
+                                        <mat-option [value]="2">LO QUE VA DE SEMANA</mat-option>
+                                        <mat-option [value]="3">LO QUE VA DEL MES (MtD)</mat-option>
+                                        <mat-option [value]="4">LO QUE VA DEL AÑO (YtD)</mat-option>
+                                        <mat-option [value]="5">LA SEMANA ANTERIOR</mat-option>
+                                        <mat-option [value]="6">EL MES ANTERIOR</mat-option>
+                                        <mat-option [value]="7">EL AÑO ANTERIOR</mat-option>
+                                        <mat-option [value]="8">Especificar una fecha</mat-option>
+                                     </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Todos los períodos excluyendo el último son dinámico, es decir, que cada vez que se ejecute la consulta se calcula la fecha</span>    
+                            </div> 
+    
+                            <div class="registroCampo" [ngStyle]="{'color': detalle.periodo == '8'  ? 'var(--texto_boton)' : 'var(--texto_boton_inactivo)', 'border-color': detalle.periodo == '8' ? 'var(--borde_tarjeta)' : 'var(--texto_boton_inactivo)'}">
+                                <div class="registroTitulo">5. Especificar período estático</div>    
+                                <div class="columnas">
+                                    <mat-form-field class="textoMitad" [style.width.%]="50">
+                                        <input #txtDesde matInput [(ngModel)]="detalle.desde" [matDatepicker]="picker1" name="detalle.desde" autocomplete="off" #desde1="ngModel" [disabled]="detalle.periodo != '8'" (input)="cambiando($event);error02=false;">
+                                        <mat-datepicker-toggle matSuffix [for]="picker1">
+                                        </mat-datepicker-toggle> 
+                                        <mat-datepicker #picker1 [disabled]="detalle.periodo != '8'"></mat-datepicker>   
+                                        <mat-hint *ngIf="error02" class="pistaError" align="start">Campo requerido</mat-hint>
+                                    </mat-form-field>
+                                    <mat-form-field class="textoMitad" [style.marginLeft.%]="2" [style.width.%]="48">
+                                        <input #txtDesde matInput [(ngModel)]="detalle.hasta" [matDatepicker]="picker2" name="detalle.hasta" autocomplete="off" #hasta1="ngModel" [disabled]="detalle.periodo != '8'" (input)="cambiando($event);error03=false;">
+                                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle> 
+                                        <mat-datepicker #picker2 [disabled]="detalle.periodo != '8'"></mat-datepicker>   
+                                        <mat-hint *ngIf="error03" class="pistaError" align="start">Campo requerido</mat-hint>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+    
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >6. Permitir que otros usuarios usen esta consulta</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.publico" name="detalle.publico" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Los usuarios no podrán modificar esta consulta</span>    
+                            </div>
+    
+                            <div class="registroCampo" *ngIf="reporteSel==1">
+                                <div class="registroTitulo">7. Transportes</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(ngModel)]="detalle.filtrolin" (selectionChange)="seleccion(1, $event);cambiando($event)">
+                                        <mat-option value="S">Todos los transportes</mat-option>
+                                        <mat-option value="N">Transportes de la lista</mat-option>
+                                        <div class="divisorP"></div>
+                                        <mat-option value="1">Seleccionar todas los Tansportes</mat-option>
+                                        <mat-option value="0">Deseleccionar todas los Tansportes</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <div class="cajaLista" [ngStyle]="{'border-color': detalle.filtrolin!='S' ? 'var(--borde_boton)' : 'var(--texto_boton_inactivo)'}">
+                                    <mat-selection-list class="lista" #listaLineas [(ngModel)]="detalle.linea" name="detalle.linea" (click)="cambiando($event)" [disabled]="detalle.filtrolin=='S'">
+                                        <mat-list-option *ngFor="let linea of lineas; let i = index" [value]="linea.id" [selected]="linea.seleccionado==1" checkboxPosition="before">
+                                            <div class="columnaLista">
+                                                <div class="lineaLista">{{linea.nombre }}</div>
+                                            </div>
+                                        </mat-list-option>
+                                    </mat-selection-list>
+                                </div>
+                                <span class="ayudaCampo_2">Transporte(s) para el filtro</span>             
+                            </div>
+    
+                            <div class="registroCampo" *ngIf="reporteSel==1 || reporteSel>=4">
+                                <div class="registroTitulo">8. Vehículos</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(ngModel)]="detalle.filtromaq" (selectionChange)="seleccion(2, $event);cambiando($event)">
+                                        <mat-option value="S">Todos los Vehículos</mat-option>
+                                        <mat-option value="N">Vehículos de la lista</mat-option>
+                                        <div class="divisorP"></div>
+                                        <mat-option value="1">Seleccionar todos los Vehículos</mat-option>
+                                        <mat-option value="0">Deseleccionar todos los Vehículos</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <div class="cajaLista" [ngStyle]="{'border-color': detalle.filtromaq!='S' ? 'var(--borde_boton)' : 'var(--texto_boton_inactivo)'}">
+                                    <mat-selection-list class="lista" #listaMaquinas [(ngModel)]="detalle.maquina" name="detalle.maquina" (click)="cambiando($event)" [disabled]="detalle.filtromaq=='S'">
+                                        <mat-list-option *ngFor="let maquina of maquinas; let i = index" [value]="maquina.id" [selected]="maquina.seleccionado==1" checkboxPosition="before">
+                                            <div class="columnaLista">
+                                                <div class="lineaLista">{{maquina.nombre }}</div>
+                                            </div>
+                                        </mat-list-option>
+                                    </mat-selection-list>
+                                </div>
+                                <span class="ayudaCampo_2">Vehículo(s) para el filtro</span>     
+                            </div>
+    
+                            <div class="registroCampo" *ngIf="reporteSel==1">
+                                <div class="registroTitulo">9. Áreas del dispositivo</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(ngModel)]="detalle.filtroare" (selectionChange)="seleccion(3, $event);cambiando($event)">
+                                        <mat-option value="S">Todas las áreas</mat-option>
+                                        <mat-option value="N">Áreas de la lista</mat-option>
+                                        <div class="divisorP"></div>
+                                        <mat-option value="1">Seleccionar todas las áreas</mat-option>
+                                        <mat-option value="0">Deseleccionar todas las áreas</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                
+                                <div class="cajaLista" [ngStyle]="{'border-color': detalle.filtroare!='S' ? 'var(--borde_boton)' : 'var(--texto_boton_inactivo)'}">
+                                    <mat-selection-list class="lista" #listaAreas [(ngModel)]="detalle.area" name="detalle.area" (click)="cambiando($event)" [disabled]="detalle.filtroare=='S'">
+                                        <mat-list-option *ngFor="let area of areas; let i = index" [value]="area.id" [selected]="area.seleccionado==1" checkboxPosition="before">
+                                            <div class="columnaLista">
+                                                <div class="lineaLista">{{area.nombre }}</div>
+                                            </div>
+                                        </mat-list-option>
+                                    </mat-selection-list>
+                                </div>
+                                <span class="ayudaCampo_2">Marque las área(s) para el filtro</span>   
+                            </div>
+    
+                            <div class="registroCampo" *ngIf="reporteSel==1">
+                                <div class="registroTitulo">10. Tipos de vehículo</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(ngModel)]="detalle.filtrofal" (selectionChange)="seleccion(4, $event);cambiando($event)">
+                                        <mat-option value="S">Todos tipos de vehículo</mat-option>
+                                        <mat-option value="N">Tipos de vehículo</mat-option>
+                                        <div class="divisorP"></div>
+                                        <mat-option value="1">Seleccionar todos tipos de vehículo</mat-option>
+                                        <mat-option value="0">Deseleccionar todos tipos de vehículo</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                
+                                <div class="cajaLista" [ngStyle]="{'border-color': detalle.filtrofal!='S' ? 'var(--borde_boton)' : 'var(--texto_boton_inactivo)'}">
+                                    <mat-selection-list class="lista" #listaFallas [(ngModel)]="detalle.falla" name="detalle.falla" (click)="cambiando($event)" [disabled]="detalle.filtrofal=='S'">
+                                        <mat-list-option *ngFor="let falla of fallas; let i = index" [value]="falla.id" [selected]="falla.seleccionado==1" checkboxPosition="before">
+                                            <div class="columnaLista">
+                                                <div class="lineaLista">{{falla.nombre }}</div>
+                                            </div>
+                                        </mat-list-option>
+                                    </mat-selection-list>
+                                </div>
+                                <span class="ayudaCampo_2">Tipo(s) de vehículo para el filtro</span>   
+                            </div>
+    
+                            <div class="registroCampo" *ngIf="reporteSel==1">
+                                <div class="registroTitulo">11. Tipos de carga</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(ngModel)]="detalle.filtrotec" (selectionChange)="seleccion(5, $event);cambiando($event)">
+                                        <mat-option value="S">Todos tipos de carga</mat-option>
+                                        <mat-option value="N">Tipos de carga de la lista</mat-option>
+                                        <div class="divisorP"></div>
+                                        <mat-option value="1">Seleccionar todos tipos de carga</mat-option>
+                                        <mat-option value="0">Deseleccionar todos tipos de carga</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                
+                                <div class="cajaLista" [ngStyle]="{'border-color': detalle.filtrotec!='S' ? 'var(--borde_boton)' : 'var(--texto_boton_inactivo)'}">
+                                    <mat-selection-list class="lista" #listaTecnicos [(ngModel)]="detalle.tecnico" name="detalle.tecnico" (click)="cambiando($event)" [disabled]="detalle.filtrotec=='S'">
+                                        <mat-list-option *ngFor="let tecnico of tecnicos; let i = index" [value]="tecnico.id" [selected]="tecnico.seleccionado==1" checkboxPosition="before">
+                                            <div class="columnaLista">
+                                                <div class="lineaLista">{{tecnico.nombre }}</div>
+                                            </div>
+                                        </mat-list-option>
+                                    </mat-selection-list>
+                                </div>
+                                <span class="ayudaCampo_2">Tipo(s) de carga para el filtro</span>   
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subir" *ngIf="verIrArriba" @arriba>
+                <button class="subirBoton" mat-flat-button (click)="irArriba()" [matTooltip]="irArribaTT" matTooltipClass = "toolTip">
+                    <mat-icon class="subirIcono">keyboard_arrow_up</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div> 
+    

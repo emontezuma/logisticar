@@ -1,0 +1,83 @@
+
+<div id="todo" class="mat-typography">
+        <div class="pantallaError"   *ngIf="pantalla==1">
+            <div class="cabeceraMensaje" >{{ errorTitulo }}</div>
+            <div class="mensaje" [innerHTML]="errorMensaje"></div>
+        </div>
+        <div class="catalogos">
+            <div class="cabecera" @esquema_top *ngIf="verTop">
+                  <button class="boton" [ngClass]="{regreso: !movil, regreso_2: movil, botHover: bot[1] }"  mat-button (mouseover)="bot[1]=true;" (mouseout)="bot[1]=false;" (click)="exportar()" [disabled]="!boton02">
+                    <mat-icon class="iconPB_2" svgIcon="i_descargar" ></mat-icon>
+                    <div [ngClass]="{texto: !movil, textoPeq: movil }">Descargar</div>
+                </button>
+                
+                
+            </div>
+            <div class="contenedorScroll" cdkScrollable>
+                <div class="tabla" @esquema (@esquema.done)="salidaEfecto($event)" *ngIf="modelo==5">
+                    <div class="ayudaCampo" *ngIf="historias.length==0 && verSR">No hay tactos en este momento</div>
+                    <div class="tablaItems_b">
+                        <button class="boton_40 regreso6" @esquema_del (@esquema_del.start)="mostrar(0)" (@esquema_del.done)="mostrar(1)"  *ngFor="let historia of historias; let i = index" (mouseover)="arreHover[i]=true;" (mouseout)="arreHover[i]=false;" [ngClass]="{ botHover: arreHover[i] }">
+                            <div class="tablaDet_40">
+                                <div class="columnas">
+                                
+                                <div class="columnas">
+                                    <mat-icon class="iconPB_70" [svgIcon]="historia.icono" ></mat-icon>
+        
+                                    <div class="filas_40" [style.marginLeft.px]="10">
+                                        <div class="textoMed_40">Tacto/Carga</div>
+                                        <div class="textoMed_40">Placas</div>
+                                        <div class="textoMed_40">Destino</div>
+                                    </div>
+                                </div>
+        
+                                <div class="columnas" [style.marginLeft.px]="5" [style.width.px]="400">
+                                    <div class="filas_40">
+                                         <div class="textoMedN_40">{{ historia.viaje }}<span class="textoMedN_40" [style.marginLeft.px]="5">{{ historia.ncarga }}</span></div>
+                                        <div class="textoMedN_40" >{{ historia.nombre}}<span class="textoMed_40" [style.marginLeft.px]="5">{{ historia.ntransporte }}</span></div>
+                                        <div class="textoMed_40">{{ historia.dDestino}}</div>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="columnas" [style.marginLeft.px]="5"  [style.width.px]="200">
+                                    <div class="filas_40" [style.alignItems]="'center'">
+                                        <div class="textoMed_Grande">{{ historia.id==0 ? 'RESTAN' : historia.idest==0 ? 'EN TRANSITO' : 'COMPLETO' }}</div>
+                                        <div class="horaGrande" [ngClass]="{ horaGrande_activa: historia.idest==0, horaGrande: historia.idest!=0, horaGrande_i: historia.alarmado=='S' }"><mat-icon class="iconPB_f" svgIcon="i_alertas" *ngIf="historia.alarmado=='S'"></mat-icon>{{ historia.idest==0 ? arreTiempos2[i] : historia.tiempo }}</div>
+                                    </div>
+                                </div>
+        
+                                <div class="columnas" [style.marginLeft.px]="5" [style.width.px]="200" *ngIf="historia.id==0">
+                                    <div class="filas_40" [style.alignItems]="'center'">
+                                        <div class="textoMed_Grande">TURNO</div>
+                                        <div class="horaGrande">{{ historia.viaje }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="columnas" [style.marginLeft.px]="5" [style.width.px]="200" *ngIf="historia.id>0">
+                                    <div class="filas_40" [style.alignItems]="'center'">
+                                        <div class="textoMed_Grande">{{ historia.idest==1 ? 'DESCARGANDO' : historia.idest>1 ? 'DESCARGADO' : 'PENDIENTE' }}</div>
+                                        <div class="horaGrande" [ngClass]="{ horaGrande_activa: historia.idest==1, horaGrande: historia.idest!=1, horaGrande_i: historia.des_alarmado=='S' }"><mat-icon class="iconPB_f" svgIcon="i_alertas" *ngIf="historia.des_alarmado=='S'"></mat-icon>{{ historia.idest==0 ? '---' : historia.idest==1 ? arreTiempos3[i] : historia.des_tiempo }}</div>
+                                    </div>
+                                </div>
+        
+                                <div class="columnas" [style.marginLeft.px]="5" [style.marginRight.px]="52">
+                                    <div class="filas_40" [style.alignItems]="'center'">
+                                        <div class="textoMed_Grande">ESTATUS</div>
+                                        <div class="horaGrande2" [ngClass]="{ horaGrande2_i: historia.idest==9 }">{{ historia.estatus }}</div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </button>   
+                    </div>                
+                </div>
+        
+            </div>
+            
+                <div class="subir" *ngIf="verIrArriba" @arriba>
+                    <button class="subirBoton" mat-flat-button (click)="irArriba()" [matTooltip]="irArribaTT" matTooltipClass = "toolTip">
+                        <mat-icon class="subirIcono">keyboard_arrow_up</mat-icon>
+                    </button>
+                </div>
+            </div>
+    </div> 
+    

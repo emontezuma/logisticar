@@ -1,0 +1,105 @@
+<div class="contenido" class="mat-typography">
+    
+    <div class="cabecera" mat-dialog-title>
+        <mat-icon class="iconoBarras iconPB_2" [svgIcon]="datos.icono0"></mat-icon>
+        <span class="titulo">{{ datos.titulo }}</span>
+    </div>
+    
+    <div class="cajaLista" *ngIf="datos.mensaje.length>0">
+        <div mat-dialog-conten class ="lista" [innerHTML]="datos.mensaje" *ngIf="datos.mensaje.length>0" [ngStyle]="{ 'font-size': movil ? '11px' : '17px' }"></div>
+    </div>
+
+    <div class="pie" mat-dialog-actions *ngIf="datos.opciones==1">
+        <button class="positivo indice" mat-button (mouseover)="val[0]=true;" (mouseout)="val[0]=false;" [ngClass]="{ botHover: val[0] }" (click)="validar(1)">
+            <mat-icon class="iconPB_3" svgIcon="i_documento"></mat-icon>
+            <span class="botTexto">Iniciar descarga</span>
+        </button>
+
+        <button class="boton indice" mat-button (mouseover)="val[2]=true;" (mouseout)="val[2]=false;" [ngClass]="{ botHover: val[2] }" (click)="validar(2)" [style.marginLeft.px]="0">
+            <mat-icon class="iconPB" svgIcon="in_pregunta"></mat-icon>
+            <span class="botTexto">Regresar a disponible</span>
+        </button>
+        <div class="divisorP"></div>
+        <div class="filas">
+            <button class="boton indice" mat-button (mouseover)="val[3]=true;" (mouseout)="val[3]=false;" [ngClass]="{ botHover: val[3] }" (click)="validar(4)">
+                <mat-icon class="iconPB" svgIcon="i_inventario"></mat-icon>
+                <span class="botTexto">Tactos</span>
+            </button>
+            <button class="boton indice" mat-button (mouseover)="val[1]=true;" (mouseout)="val[1]=false;" [ngClass]="{ botHover: val[1] }" (click)="validar(3)">
+                <mat-icon class="iconPB" svgIcon="i_cancelar"></mat-icon>
+                <span class="botTexto">Cancelar</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="pie" mat-dialog-actions *ngIf="datos.opciones==2">
+        <button class="positivo indice" mat-button (mouseover)="val[0]=true;" (mouseout)="val[0]=false;" [ngClass]="{ botHover: val[0] }" (click)="validar(1)">
+            <mat-icon class="iconPB_3" svgIcon="i_finalizado"></mat-icon>
+            <span class="botTexto">Finalizar jornada</span>
+        </button>
+
+        <button class="boton indice_2" mat-button (mouseover)="val[2]=true;" (mouseout)="val[2]=false;" [ngClass]="{ botHover: val[2] }" (click)="validar(2)" [style.marginLeft.px]="0">
+            <mat-icon class="iconPB" svgIcon="in_pregunta"></mat-icon>
+            <span class="botTexto">Finalizar la descarga actual y enviar a espera</span>
+        </button>
+        <div class="divisorP"></div>
+        <div class="filas">
+            <button class="boton indice" mat-button (mouseover)="val[3]=true;" (mouseout)="val[3]=false;" [ngClass]="{ botHover: val[3] }" (click)="validar(4)">
+                <mat-icon class="iconPB" svgIcon="i_inventario"></mat-icon>
+                <span class="botTexto">Tactos</span>
+            </button>
+            <button class="boton indice" mat-button (mouseover)="val[1]=true;" (mouseout)="val[1]=false;" [ngClass]="{ botHover: val[1] }" (click)="validar(3)">
+                <mat-icon class="iconPB" svgIcon="i_cancelar"></mat-icon>
+                <span class="botTexto">Cancelar</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="pie" mat-dialog-actions *ngIf="datos.opciones==3">
+        <button class="positivo indice" mat-button (mouseover)="val[0]=true;" (mouseout)="val[0]=false;" [ngClass]="{ botHover: val[0] }" (click)="validar(1)">
+            <mat-icon class="iconPB_3" svgIcon="i_finalizado"></mat-icon>
+            <span class="botTexto">Finalizar jornada</span>
+        </button>
+
+        <button class="boton indice_2" mat-button (mouseover)="val[2]=true;" (mouseout)="val[2]=false;" [ngClass]="{ botHover: val[2] }" (click)="validar(2)" [style.marginLeft.px]="0">
+            <mat-icon class="iconPB" svgIcon="in_pregunta"></mat-icon>
+            <span class="botTexto">Iniciar un nuevo tacto</span>
+        </button>
+        <div class="divisorP"></div>
+        <div class="filas">
+            <button class="boton indice" mat-button (mouseover)="val[3]=true;" (mouseout)="val[3]=false;" [ngClass]="{ botHover: val[3] }" (click)="validar(4)">
+                <mat-icon class="iconPB" svgIcon="i_inventario"></mat-icon>
+                <span class="botTexto">Tactos</span>
+            </button>
+            <button class="boton indice" mat-button (mouseover)="val[1]=true;" (mouseout)="val[1]=false;" [ngClass]="{ botHover: val[1] }" (click)="validar(3)">
+                <mat-icon class="iconPB" svgIcon="i_cancelar"></mat-icon>
+                <span class="botTexto">Cancelar</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="pie" mat-dialog-actions *ngIf="datos.opciones==4">
+        <button class="positivo indice" mat-button (mouseover)="val[0]=true;" (mouseout)="val[0]=false;" [ngClass]="{ botHover: val[0] }" (click)="validar(1)">
+            <mat-icon class="iconPB_3" svgIcon="i_finalizado"></mat-icon>
+            <span class="botTexto">Regresar a disponible</span>
+        </button>
+
+        <button class="boton indice_2" mat-button (mouseover)="val[2]=true;" (mouseout)="val[2]=false;" [ngClass]="{ botHover: val[2] }" (click)="validar(2)" [style.marginLeft.px]="0">
+            <mat-icon class="iconPB" svgIcon="in_pregunta"></mat-icon>
+            <span class="botTexto">Enviar a espera</span>
+        </button>
+        <div class="divisorP"></div>
+        <div class="filas">
+            <button class="boton indice" mat-button (mouseover)="val[3]=true;" (mouseout)="val[3]=false;" [ngClass]="{ botHover: val[3] }" (click)="validar(4)">
+                <mat-icon class="iconPB" svgIcon="i_inventario"></mat-icon>
+                <span class="botTexto">Tactos</span>
+            </button>
+            <button class="boton indice" mat-button (mouseover)="val[1]=true;" (mouseout)="val[1]=false;" [ngClass]="{ botHover: val[1] }" (click)="validar(3)">
+                <mat-icon class="iconPB" svgIcon="i_cancelar"></mat-icon>
+                <span class="botTexto">Cancelar</span>
+            </button>
+        </div>
+    </div>
+
+</div>
+    

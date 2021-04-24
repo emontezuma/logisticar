@@ -1,0 +1,873 @@
+
+<div id="todo" class="mat-typography">
+    <div class="pantallaError"   *ngIf="pantalla==1">
+        <div class="cabeceraMensaje" >{{ errorTitulo }}</div>
+        <div class="mensaje" [innerHTML]="errorMensaje"></div>
+    </div>
+    <div class="catalogos">
+        <div class="cabecera">
+            <div class="botonera1">
+                <button class="boton regreso5" mat-button (mouseover)="licSel=true;" (mouseout)="licSel=false;" [ngClass]="{botHover: licSel}" (click)="licenciar()" *ngIf="!licenciado">
+                    <mat-icon class="iconoBarras iconPB_2" svgIcon="i_licencia"></mat-icon>
+                    <div class="texto">Aplicar licencia</div> 
+                </button>
+                <button class="boton regreso5" mat-button (mouseover)="licSel=true;" (mouseout)="licSel=false;" [ngClass]="{botHover: licSel}" (click)="colores()" *ngIf="eProgramador">
+                    <mat-icon class="iconoBarras iconPB_2" svgIcon="i_paleta"></mat-icon>
+                    <div class="texto">Temas</div> 
+                </button>
+                  <button class="boton regreso" mat-button (mouseover)="lineaSel=true;" (mouseout)="lineaSel=false;" [ngClass]="{botHover: lineaSel}" (click)="guardar()" [disabled]="!boton01">
+                    <mat-icon class="iconoBarras iconPB_2" svgIcon="i_guardar"></mat-icon>
+                    <div class="texto">Guardar</div> 
+                </button>
+                <button class="boton regreso6" mat-button (mouseover)="bot4Sel=true;" (mouseout)="bot4Sel=false;" [ngClass]="{botHover: bot4Sel}" (click)="cancelar()" [disabled]="!boton02">
+                    <mat-icon class="iconoBarras iconPB_2" svgIcon="i_cancelar" ></mat-icon>
+                    <div class="texto">Cancelar</div>
+                </button>
+            </div>
+        </div>
+
+        <div class="contenedorScroll" cdkScrollable [style.overflowY]="verBarra">
+
+            <div class="tabla" @esquema (@esquema.done)="salidaEfecto($event)" *ngIf="modelo==2">
+                <div class="registroGeneral">
+                    <div class="grupoTitulo">1. NUEVO EQUIPO (BOTONERA, RELOJ)</div>    
+                    <div class="grupoCampos">
+                        <div class="registroCampo">
+                            <div class="registroTitulo" >1.1 Tipo de equipo</div>    
+                            <mat-form-field class="texto">
+                                <mat-select [(value)]="tipo" name="tipo" (selectionChange)="generarClave(); cambiando($event)">
+                                    <mat-option value="B">Botonera</mat-option>
+                                    <mat-option value="R">Reloj</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <span class="ayudaCampo_2">Especifique el equipo a licenciar</span>    
+                        </div> 
+                        <div class="registroCampo" >
+                            <div class="registroTitulo">1.2 Código del equipo</div>    
+                            <mat-form-field class="cajaTexto_2">
+                                <input matInput #txtT1 [(ngModel)]="local" maxlength="50" autocomplete="off" name="local"  #local1 ="ngModel" (input)="generarClave(); cambiando($event) " >
+                                <button mat-button *ngIf="local" matSuffix mat-icon-button aria-label="Clear" (click)="local = '';cambiando();error01=true;">
+                                    <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                </button>
+                                <mat-hint class="pista" align="end">{{ local1.value?.length || 0 }} de 50</mat-hint>
+                                <mat-hint [ngClass]="{ pista: !error01, pistaError: error01 }" align="start">Campo requerido</mat-hint>
+                            </mat-form-field>                            
+                            <span class="ayudaCampo_2">Especfique el número de pager o codigo de botonera</span>       
+                        </div>
+                        <div class="registroCampo" >
+                            <div class="registroTitulo">1.3 Clave pública</div>    
+                            <div class="registroTitulo2">{{ clavePublica }}</div>    
+                            <span class="ayudaCampo_2">Copie y envíe éste número a su proveedor de Logisticar</span>       
+                        </div>
+                        <div class="registroCampo" >
+                            <div class="registroTitulo">1.4 Licencia</div>    
+                            <mat-form-field class="cajaTexto_2">
+                                <input matInput #txtT2 [(ngModel)]="licencia" maxlength="50" autocomplete="off" name="licencia"  #licencia1 ="ngModel" (input)="cambiando($event);error01=false; " >
+                                <button mat-button *ngIf="licencia" matSuffix mat-icon-button aria-label="Clear" (click)="licencia = '';cambiando();error02=true;">
+                                    <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                </button>
+                                <mat-hint class="pista" align="end">{{ licencia1.value?.length || 0 }} de 50</mat-hint>
+                                <mat-hint [ngClass]="{ pista: !error02, pistaError: error02 }" align="start" *ngIf="error02">Campo requerido</mat-hint>
+                                <mat-hint [ngClass]="{ pista: !error03, pistaError: error03 }" align="start" *ngIf="error03">Número de licencia inválida</mat-hint>
+                            </mat-form-field>                            
+                            <span class="ayudaCampo_2">Introduzca la clave asignada por su proveedor</span>       
+                        </div>
+                    </div>
+                    
+                    <div class="grupoTitulo">2. EQUIPOS LICENCIADOS</div>    
+                    <div class="cabecera_2" @esquema>
+                        <div class="tablaCab_2">
+                            <div class="col00"></div>
+                            <div class="col01">Equipo</div>
+                            <div class="col02">Número/ID</div>
+                            <div class="col02">Licencia</div>
+                            <div class="col03">Desde</div>
+                        </div>
+                    </div>
+
+                    <div class="tabla">
+                        <div class="ayudaCampo" *ngIf="licencias.length==0">No hay equipos licenciados</div>
+                        <div class="tablaItems_b">    
+                            <button class="boton_2 regreso3" mat-button *ngFor="let licencia of licencias; let i = index"  (mouseover)="licencia.seleccionado=true;" (mouseout)="licencia.seleccionado=false;" [ngClass]="{botHover: licencia.seleccionado }">
+                                <div class="tablaDet_2">
+                                    <div class="col00">
+                                        <mat-icon class="iconPB_6" [svgIcon]="iconoGeneral"></mat-icon>
+                                    </div>
+                                    <div class="col01">{{ licencia.tipo == 'R' ? 'Reloj' : 'Botonera' }}</div>
+                                    <div class="col02">{{ licencia.mmcall }}</div>
+                                    <div class="col02">{{ licencia.cronos }}</div>
+                                    <div class="col03">{{ licencia.licenciado | date:'dd/MM/yyyy'}}</div>
+                                </div>
+                            </button>                
+                        </div>                
+                    </div>                       
+                </div>
+            </div>
+            <div class="tabla" @esquema (@esquema.done)="salidaEfecto($event)" *ngIf="modelo==1">
+                  <div class="registroCaja" >
+                    <div class="alertaCaja" *ngIf="faltaMensaje" >
+                        <mat-icon class="iconPB_4" svgIcon="i_alerta"></mat-icon>
+                        <span class="alertaMensaje" [innerHTML]="faltaMensaje"></span>
+                    </div>
+                    <div class="registroGeneral">
+                        <div class="grupoTitulo">1. DATOS GENERALES DE LA APLICACION</div>    
+                        <div class="grupoCampos">
+                            <div class="registroCampo" >
+                                <div class="registroTitulo">1.1. Razón social de la empresa</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 [(ngModel)]="detalle.planta" maxlength="100" autocomplete="off" name="detalle.planta"  #planta ="ngModel" (input)="cambiando($event);error01=false; " >
+                                    <button mat-button *ngIf="detalle.planta" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.planta = '';cambiando();error01=true;">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ planta.value?.length || 0 }} de 100</mat-hint>
+                                    <mat-hint [ngClass]="{ pista: !error01, pistaError: error01 }" align="start">Campo requerido</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Nombre o razón social de la planta</span>       
+                            </div>
+
+                            <div class="registroCampo" >
+                                <div class="registroTitulo">1.2. Registro Federal de Contribuyentes (RFC)</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT2 [(ngModel)]="detalle.rfc" maxlength="30" autocomplete="off" name="detalle.rfc"  #rfc ="ngModel" (input)="cambiando($event);error02=false; " >
+                                    <button mat-button *ngIf="detalle.rfc" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.rfc = '';cambiando();error02=true;">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ rfc.value?.length || 0 }} de 30</mat-hint>
+                                    <mat-hint [ngClass]="{ pista: !error02, pistaError: error02 }" align="start">Campo requerido</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Especifique el RFC</span>       
+                            </div>
+
+                            <div class="registroCampo" >
+                                <div class="registroTitulo">1.3. Número de licencia de LogistiCAR</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT3 [(ngModel)]="detalle.licencia" maxlength="100" autocomplete="off" name="detalle.licencia"  #licencia ="ngModel" (input)="cambiando($event);error03=false; " >
+                                    <button mat-button *ngIf="detalle.licencia" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.licencia = '';cambiando();error03=true;">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ licencia.value?.length || 0 }} de 100</mat-hint>
+                                    <mat-hint [ngClass]="{ pista: !error03, pistaError: error03 }" align="start">Campo requerido</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Especifique la licencia</span>       
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">1.4. Logo corporativo</div>    
+                                <div class="registroconImagen">
+                                    <mat-form-field class="cajaTexto_3">
+                                        <input matInput #txtImagen [(ngModel)]="detalle.logo_ruta" maxlength="500" autocomplete="off" name="detalle.logo_ruta" #logo_ruta="ngModel" (input)="cambiando($event)">
+                                        <button mat-button *ngIf="detalle.logo_ruta" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.logo_ruta = '';cambiando($event)">
+                                            <mat-icon>close</mat-icon>
+                                        </button>
+                                        <mat-hint class="pista" align="end">{{ logo_ruta.value?.length || 0 }} de 500</mat-hint>
+                                        <mat-hint class="pista" align="start">{{ mensajeImagen }}</mat-hint>
+                                    </mat-form-field>  
+                                    <input type="file" style="display: none" (change)="onFileSelected($event)" accept=".png;.jpg;.svg;.bmp" #fileInput> 
+                                    <button class="boton regreso4" mat-button (mouseover)="imagenSel=true;" (mouseout)="imagenSel=false;" [matTooltip] = "ayuda01" matTooltipClass = "toolTip" matTooltipShowDelay = "100" [ngClass]="{botHover: imagenSel}" (click)="fileInput.click()">
+                                        <mat-icon class="iconPB_3" svgIcon="i_ok"></mat-icon>
+                                    </button>
+                                </div>
+                                <span class="ayudaCampo_2">Logo a mostrar en la barra superior de la aplicación</span>   
+                            </div>
+
+                            <div class="registroCampo" >
+                                <div class="registroTitulo">1.5. Posición del logo (margen izquierdo)</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.logo_izquierda" maxlength="6" autocomplete="off" name="detalle.logo_izquierda"  #logo_izquierda ="ngModel" (input)="cambiando($event);error03=false; " >
+                                    <mat-hint class="pista" align="start">Expresado en pixels</mat-hint>
+                                </mat-form-field>                            
+                            </div>
+                            <div class="registroCampo" >
+                                <div class="registroTitulo">1.6. Posición del logo (margen superior)</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.logo_arriba" maxlength="6" autocomplete="off" name="detalle.logo_arriba"  #logo_arriba ="ngModel" (input)="cambiando($event);error03=false; " >
+                                    <mat-hint class="pista" align="start">Expresado en pixels</mat-hint>
+                                </mat-form-field>                            
+                            </div>
+
+                            <div class="registroCampo" >
+                                <div class="registroTitulo">1.7. Ancho del logo</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.logo_ancho" maxlength="6" autocomplete="off" name="detalle.logo_ancho"  #logo_ancho ="ngModel" (input)="cambiando($event);error03=false; " >
+                                    <mat-hint class="pista" align="start">Expresado en pixels</mat-hint>
+                                </mat-form-field>                            
+                            </div>
+                            <div class="registroCampo" >
+                                <div class="registroTitulo">1.8. Alto del logo</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.logo_alto" maxlength="6" autocomplete="off" name="detalle.logo_alto"  #logo_alto ="ngModel" (input)="cambiando($event);error03=false; " >
+                                    <mat-hint class="pista" align="start">Expresado en pixels</mat-hint>
+                                </mat-form-field>                            
+                            </div>
+
+                        </div>
+
+                        <div class="grupoTitulo">2. Funcionamiento de LogistiCAR</div>    
+                        <div class="grupoCampos">
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >2.1. Pre-Asignación de ruta desde el estado de DISPONIBLE</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.asignar_caseta" name="detalle.asignar_caseta" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Permitir la pre-asignación del tacto desde la identificación del dispositivo</span>    
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >2.2. Proponer el origen y el destino de los tactos según configuración</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.asignar_automatico" name="detalle.asignar_automatico" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">El sistema propondrá el origen y el destino de los tactos al inciar y al finalizar la jornada</span>    
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >2.3. Que mostrar en el visor</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.visor_mostrar" name="detalle.visor_mostrar" (selectionChange)=cambiando($event)>
+                                        <mat-option value="0">(Todos los eventos)</mat-option>
+                                        <mat-option value="1">Sólo dispositivos en espera</mat-option>
+                                        <mat-option value="2">Dispositivos en tránsito y descarga</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique los eventos que se mostrarán en la funcionalidad del Visor (Reportes/Visor)</span>    
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >2.4. Permitir la entrada de Transportes en vivo</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.agregar_transporte" name="detalle.agregar_transporte" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">El sistema permitirá que el usuario de la caseta agregue transportes al catálogo</span>    
+                            </div>
+
+                        </div>
+
+                       
+                        <div class="grupoTitulo">3. CORREO ELECTRÓNCO CORPORATIVO</div>    
+                            <div class="grupoCampos">
+                            
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >3.1. Nombre de usuario</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 [(ngModel)]="detalle.correo_cuenta" maxlength="100" autocomplete="off" name="detalle.correo_cuenta"  #correo_cuenta ="ngModel" (input)="cambiando($event); " >
+                                    <button mat-button *ngIf="detalle.correo_cuenta" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.correo_cuenta = '';cambiando()">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ correo_cuenta.value?.length || 0 }} de 100</mat-hint>
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el nombre del usuario de la cuenta de correos</span>    
+                            </div> 
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >3.2. Contraseña</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 [(ngModel)]="detalle.correo_clave" maxlength="100" autocomplete="off" name="detalle.correo_clave"  #correo_clave ="ngModel" (input)="cambiando($event); " >
+                                    <button mat-button *ngIf="detalle.correo_clave" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.correo_clave = '';cambiando()">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ correo_clave.value?.length || 0 }} de 100</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique la contraseña del usuario de la cuenta de correos</span>    
+                            </div> 
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >3.3 Nombre del host</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 [(ngModel)]="detalle.correo_host" maxlength="100" autocomplete="off" name="detalle.correo_host"  #correo_host ="ngModel" (input)="cambiando($event); " >
+                                    <button mat-button *ngIf="detalle.correo_host" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.correo_host = '';cambiando()">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ correo_host.value?.length || 0 }} de 100</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el nombre del host del servidor de correos</span>    
+                            </div> 
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >3.4. Número del puerto</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtT1 [(ngModel)]="detalle.correo_puerto" maxlength="100" autocomplete="off" name="detalle.correo_puerto"  #correo_puerto ="ngModel" (input)="cambiando($event); " >
+                                    <button mat-button *ngIf="detalle.correo_puerto" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.correo_puerto = '';cambiando()">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ correo_puerto.value?.length || 0 }} de 100</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el número del puerto del servidor de correos</span>    
+                            </div> 
+    
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >3.5. Seguridad SSL</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.correo_ssl" name="detalle.correo_ssl" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique ei sl servidor aplica 'Secure Sockets Layer'</span>    
+                            </div>  
+
+                        </div>
+
+                        <div class="grupoTitulo">4. BACK-END (aplicación del servidor)</div>    
+                            <div class="grupoCampos">
+                                
+                            <div class="registroCampo">
+                                <div class="registroTitulo">4.1. Canales de comunicación a utilizar para las alarmas</div>    
+
+                                <div class="cajaLista">
+                                    <mat-selection-list #listaListad class="lista2" [(ngModel)]="detalle.listado" name="detalle.listado" (click)="cambiando($event)">
+                                        <mat-list-option value="0" [selected]="detalle.be_alarmas_correos == 'S'" checkboxPosition="before">
+                                            <div class="columnaLista">
+                                                <div >Correo electrónico</div>
+                                            </div>
+                                        </mat-list-option>
+                                        <mat-list-option value="1" [selected]="detalle.be_alarmas_mmcall == 'S'" checkboxPosition="before">
+                                            <div class="columnaLista">
+                                                <div >Web service de MMCall</div>
+                                            </div>
+                                        </mat-list-option>
+                                        <mat-list-option value="2" [selected]="detalle.be_alarmas_llamadas == 'S'" checkboxPosition="before">
+                                            <div class="columnaLista">
+                                                <div >Llamada telefónica</div>
+                                            </div>
+                                        </mat-list-option>
+                                        <mat-list-option value="3" [selected]="detalle.be_alarmas_sms == 'S'" checkboxPosition="before">
+                                            <div class="columnaLista">
+                                                <div >Mensaje de texto (SMS)</div>
+                                            </div>
+                                        </mat-list-option>
+                                        
+                                    </mat-selection-list>
+                                </div>
+                                
+                                <span class="ayudaCampo_2">Marque los canales de comunicación que desea activar</span>    
+                            </div> 
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">4.2. Tiempo de espera para el envío de correos</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.be_revision_correos" maxlength="6" autocomplete="off" name="detalle.be_revision_correos" #be_revision_correos="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">Expresado en segundos</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el tiempo de espera para el envio de correos</span>                                 
+                            </div> 
+                            
+                            <div class="registroCampo">
+                                <div class="registroTitulo">4.3. Tiempo de espera para el envío de mensajes a MMCall</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.be_revision_mmcall" maxlength="6" autocomplete="off" name="detalle.be_revision_mmcall" #be_revision_mmcall="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">Expresado en segundos</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el tiempo de espera para el envio de mensajes a MMCall</span>                                 
+                            </div> 
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >4.4. Envío automático de reportes</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.be_envio_reportes" name="detalle.be_envio_reportes" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">Si</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Activa el envío de reportes automáticos por correo</span>    
+                            </div>
+
+                            <div class="registroCampo" *ngFor="let evento of eventos; let i = index">
+                                <div class="registroTitulo" >4.{{5 + i}} Evento ({{ evento.alerta}}) {{ evento.nombre}}</div>    
+                                <div class="columnas" >
+                                    <mat-form-field class="texto66">
+                                        <mat-select [(value)]="evento.monitor" name="evento.monitor" (selectionChange)=cambiando($event)>
+                                            <mat-option value="S">Activo</mat-option>
+                                            <mat-option value="N">Inactivo</mat-option>
+                                        </mat-select>
+                                        <mat-hint class="pista" align="start">Estado de la revisión</mat-hint>
+                                    </mat-form-field>
+                                    <mat-form-field class="texto33">
+                                        <input matInput type="number" [(ngModel)]="evento.revision" maxlength="6" autocomplete="off" name="evento.revision" #revision="ngModel" (input)="cambiando($event)">
+                                        <mat-hint class="pista" align="start">Revisar cada (seg)</mat-hint>
+                                    </mat-form-field>  
+                                </div>
+                                <span class="ayudaCampo_2">Si inactiva la revisión la aplicación no generará la alerta</span>    
+                            </div>
+                            
+                        </div>
+
+                        <div class="grupoTitulo">5. Optimización de mensajes</div>    
+                        <div class="grupoCampos">
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >5.1. Optimizar llamadas telefónicas</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.optimizar_llamada" name="detalle.optimizar_llamada" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Optimiza las llamadas telefónicas</span>    
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >5.2. Optimizar mensajes de texto (SMS)</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.optimizar_sms" name="detalle.optimizar_sms" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Optimiza los mensajes de texto</span>    
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >5.3. Optimizar correos electrónicos</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.optimizar_correo" name="detalle.optimizar_correo" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Optimiza los correos electrónicos</span>    
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >5.4. Optimizar mensajes a MMCall</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.optimizar_mmcall" name="detalle.optimizar_mmcall" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Optimiza mensajes a MMCall</span>    
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >5.5. Mantener la prioridad</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.mantener_prioridad" name="detalle.mantener_prioridad" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Mantener la prioridad del mensaje después de optimizarlos</span>    
+                            </div>
+                            
+                        </div>
+
+                        <div class="grupoTitulo">6. Interfaz telefónica</div>    
+                        <div class="grupoCampos">
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >6.1. Activar el uso de la interfaz telefónica</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.utilizar_arduino" name="detalle.utilizar_arduino" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique si se activa la conexión con la interfaz telefónica</span>    
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">6.2. Nombre del puerto de comunicación principal</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput  [(ngModel)]="detalle.puerto_comm1" maxlength="10" autocomplete="off" name="detalle.puerto_comm1" #puerto_comm1="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el nombre del puerto principal</span>                                 
+                            </div>
+                            
+                            <div class="registroCampo">
+                                <div class="registroTitulo">6.3. Parámetros del puerto principal</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput  [(ngModel)]="detalle.puerto_comm1_par" maxlength="100" autocomplete="off" name="detalle.puerto_comm1_par" #puerto_comm1_par="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">Separe los parámetros con una coma. Ejemplo: 19200,8,0,1,2,S</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique: BaudRate, DataBits, Parity, StopBits, Handshake RtsEnable</span>                                 
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">6.4. Nombre del puerto de comunicación secundario</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput  [(ngModel)]="detalle.puerto_comm2" maxlength="10" autocomplete="off" name="detalle.puerto_comm2" #puerto_comm2="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el nombre del puerto secundario</span>                                 
+                            </div> 
+                            
+                            <div class="registroCampo">
+                                <div class="registroTitulo">6.5. Parámetros del puerto secundario</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput  [(ngModel)]="detalle.puerto_comm2_par" maxlength="100" autocomplete="off" name="detalle.puerto_comm2_par" #puerto_comm2_par="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">Separe los parámetros con una coma. Ejemplo: 19200,8,0,1,2,S</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el nombre del puerto secundario</span>                                 
+                            </div>
+    
+                            <div class="registroCampo">
+                                <div class="registroTitulo">6.6. Carpeta para almacenar los archivos para SMS</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput  [(ngModel)]="detalle.ruta_sms" maxlength="500" autocomplete="off" name="detalle.ruta_sms" #ruta_sms="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique la ruta en el servidor</span>                                 
+                            </div>
+                            
+                            <div class="registroCampo">
+                                <div class="registroTitulo">6.7. Carpeta para almacenar los audios para las llamadas</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput  [(ngModel)]="detalle.ruta_audios" maxlength="500" autocomplete="off" name="detalle.ruta_audios" #ruta_audios="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique la ruta en el servidor</span>                                 
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">6.8. Nombre de la voz a utilizar</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput  [(ngModel)]="detalle.voz_predeterminada" maxlength="255" autocomplete="off" name="detalle.voz_predeterminada" #ruta_audios="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el nombre EXACTO del paquete de voz a usar en el servidor</span>                                 
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">6.9. Veces que se reproducirá el audio</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.veces_reproducir" maxlength="2" autocomplete="off" name="detalle.veces_reproducir" #veces_reproducir="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Número de veces que se reproducirá el audo</span>                                 
+                            </div> 
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">6.10. Tiempo máximo de espera (timeout) para una llamada telefónica</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.timeout_llamadas" maxlength="4" autocomplete="off" name="detalle.timeout_llamadas" #timeout_llamadas="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">Expresado en segundos</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Cumplido el tiempo se cancela la llamada</span>                                 
+                            </div> 
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">6.11. Tiempo máximo e espera (timeout) para el envío de SMS</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.timeout_sms" maxlength="4" autocomplete="off" name="detalle.timeout_sms" #timeout_sms="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">Expresado en segundos</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Cumplido el tiempo se cancela el envío del SMS</span>                                 
+                            </div> 
+                    
+                        </div>    
+
+                        <div class="grupoTitulo">7. Llamadas telefónicas</div>    
+                        <div class="grupoCampos">
+                            <div class="registroCampo">
+                                <div class="registroTitulo">7.1. Máximo de intentos</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.escape_llamadas" maxlength="1" autocomplete="off" name="detalle.escape_llamadas" #escape_llamadas="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                    <mat-hint class="pista" align="end">Expresado en segundos</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Luego de llegar al límite, se cancela la llamada</span>                                 
+                            </div> 
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >7.2. Traducir el mensaje que se convertirá en audio</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.traducir" name="detalle.traducir" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Debe gestionar la tabla de traducción en la sección de catálogos</span>    
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >7.3. Acción a realizar si no contestan</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.escape_accion" name="detalle.escape_accion" (selectionChange)=cambiando($event)>
+                                        <mat-option value="N">No hacer nada</mat-option>
+                                        <mat-option value="S">Enviar mensaje y/o correo electrónico</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique la acción a tomar si no contestan</span>    
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">7.4. Mensaje a enviar</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" #txtNotas [(ngModel)]="detalle.escape_mensaje" maxlength="200" autocomplete="off" name="detalle.escape_mensaje" #escape_mensaje="ngModel" (input)="cambiando($event)"></textarea>
+                                    <button mat-button *ngIf="detalle.escape_mensaje" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.escape_mensaje = '';cambiando();">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ escape_mensaje.value?.length || 0 }} de 200</mat-hint>
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Este mensaje se enviará por correo y como SMS</span>       
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >7.5. Enviar SMS al teléfono que no contestó</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.escape_mensaje_propio" name="detalle.escape_mensaje_propio" (selectionChange)=cambiando($event)>
+                                        <mat-option value="N">No</mat-option>
+                                        <mat-option value="S">Si</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Se le enviará un SMS al número que no respondió</span>    
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">7.6. Recipiente asociado</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <mat-select #lstC15 [(ngModel)]="detalle.escape_lista" name="detalle.escape_lista" (selectionChange)=cambiando($event)>
+                                        <mat-option *ngFor="let lista of listas; let i = index" [value]="lista.id">{{ lista.nombre }}</mat-option>
+                                    </mat-select>
+                                    <mat-hint *ngIf="error35" class="pistaError" align="start">Seleccione un recipiente válido</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Indique el recipiente asociado</span>       
+                            </div>
+
+                        </div>
+
+                        <div class="grupoTitulo">8. Temas y colores</div>    
+                        <div class="grupoCampos">
+                            <div class="registroCampo">
+                                <div class="registroTitulo">8.1. Tema por defecto para la aplicación ANDON</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <mat-select #lstC15 [(ngModel)]="detalle.tema_principal" name="detalle.tema_principal" (selectionChange)=cambiando($event)>
+                                        <mat-option *ngFor="let tema of temas; let i = index" [value]="tema.id">{{ tema.nombre }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Indique el tema por defecto</span>       
+                            </div>
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >8.2. Permitir a los usuarios cambiar temas</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.tema_permitir_cambio" name="detalle.tema_permitir_cambio" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique el se le permite al usuario cambiar el tema (colores)</span>    
+                            </div> 
+                            <!--<div class="registroCampo">
+                                <div class="registroTitulo" >7.3. Permitir creación de temas</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.tema_permitir_crear" name="detalle.tema_permitir_crear" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Se le enviará un SMS al número que no respondió</span>    
+                            </div>-->
+                        </div>
+
+                        
+                        <div class="grupoTitulo">9. Mensajes al reloj y audios automáticos</div>    
+                        <div class="grupoCampos">
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >9.1. Activar la generación de audios generales</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.audios_activar" name="detalle.audios_activar" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Los audios sólo se generarán mientras la falla no sea atendida</span>    
+                            </div>
+
+                         
+                            <div class="registroCampo">
+                                <div class="registroTitulo">9.2. Ruta de la carpeta general de audios</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput  [(ngModel)]="detalle.audios_ruta" maxlength="1000" autocomplete="off" name="detalle.audios_ruta" #audios_ruta="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="end">{{ audios_ruta.value?.length || 0 }} de 1000</mat-hint>
+                                </mat-form-field>   
+                                <span class="ayudaCampo_2">Ruta dónde se almacenarán los audios (debe existir en el servidor)</span>                                 
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">9.3. Archivo de audio de prefijo</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput  [(ngModel)]="detalle.audios_prefijo" maxlength="1000" autocomplete="off" name="detalle.audios_prefijo" #audios_prefijo="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="end">{{ audios_prefijo.value?.length || 0 }} de 1000</mat-hint>
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                </mat-form-field>   
+                                <span class="ayudaCampo_2">Ruta dónde se encuentra el audio prefijo</span>                                 
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">9.4. Mensaje a MMCall</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput #txtNombre [(ngModel)]="detalle.mensaje_mmcall" maxlength="60" autocomplete="off" name="detalle.mensaje_mmcall"  #mensaje_mmcall ="ngModel" (input)="cambiando($event) " >
+                                    <button mat-button *ngIf="detalle.mensaje_mmcall" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.mensaje_mmcall = '';cambiando();">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ mensaje_mmcall.value?.length || 0 }} de 60</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Especifique el mensaje a enviar a MMCall (Se truncará a 40 caracteres)</span>       
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">9.5. Mensaje a reproducir</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <textarea matInput #txtTelefonos cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" #txtNotas [(ngModel)]="detalle.mensaje" maxlength="300" autocomplete="off" name="detalle.mensaje" #mensaje="ngModel" (input)="cambiando($event);error07=false;"></textarea>
+                                    <button mat-button *ngIf="detalle.mensaje" matSuffix mat-icon-button aria-label="Clear" (click)="detalle.mensaje = '';cambiando();">
+                                        <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                                    </button>
+                                    <mat-hint class="pista" align="end">{{ mensaje.value?.length || 0 }} de 300</mat-hint>
+                                    <mat-hint class="pista" align="start">Campo requerido</mat-hint>
+                                </mat-form-field>                            
+                                <span class="ayudaCampo_2">Especifique el mensaje a enviar</span>
+                                <span class="ayudaCampo_2">[1] Nombre del chofer</span>       
+                                <span class="ayudaCampo_2">[2] Nombre del transporte</span>       
+                                <span class="ayudaCampo_2">[3] Placas del vehículo</span>       
+                                <span class="ayudaCampo_2">[4] Nombre del destino</span>     
+                                <span class="ayudaCampo_2">[5] Fecha de la llamada</span>       
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >9.6 Tiempo de espera para repetir el mensaje</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.tiempo_andon" maxlength="5" min="0" max="86400" autocomplete="off" name="detalle.tiempo_andon" #tiempo_andon="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">0=No repetir</mat-hint>
+                                    <mat-hint class="pista" align="end">Expresado en segundos</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el tiempo de espera entre cada repetición</span>                                 
+                            </div> 
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo" >9.7 Número de veces que se repetirá el  mensajes</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.andon_repeticiones" maxlength="3" min="0" max="999" autocomplete="off" name="detalle.andon_repeticiones" #andon_repeticiones="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="end">1-999</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el número de repeticiones</span>                                 
+                            </div> 
+                        </div>
+
+
+                         <div class="grupoTitulo">10. Otros parámetros</div>    
+                        <div class="grupoCampos">
+                            <div class="registroCampo">
+                                <div class="registroTitulo">10.1. Meses de espera para depurar los datos</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.gestion_meses" maxlength="4" autocomplete="off" name="detalle.gestion_meses" #gestion_meses="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">Campo opcional</mat-hint>
+                                    <mat-hint class="pista" align="end">Expresado en segundos</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Una vez vencido este tiempo la aplicación depurará los datos. 0 = No depurar</span>                                 
+                            </div>
+                            
+                            <div class="registroCampo">
+                                <div class="registroTitulo">10.2. Ruta de la carpeta de trabajo (gestión de reportes)</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput  [(ngModel)]="detalle.ruta_archivos_enviar" maxlength="500" autocomplete="off" name="detalle.ruta_archivos_enviar" #ruta_archivos_enviar="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="end">{{ ruta_archivos_enviar.value?.length || 0 }} de 500</mat-hint>
+                                </mat-form-field>   
+                                <span class="ayudaCampo_2">Esta ruta debe existir en la PC que envía los reportes</span>                                 
+                            </div>
+
+                            <!--<div class="registroCampo">
+                                <div class="registroTitulo" >10.3. Cambios de turno</div>    
+                                <mat-form-field class="texto">
+                                    <mat-select [(value)]="detalle.turno_modo" name="detalle.turno_modo" (selectionChange)=cambiando($event)>
+                                        <mat-option value="0">Manual (el usuario deberá cambiarlo)</mat-option>
+                                        <mat-option value="1">Sugerir el cambio sin obligar</mat-option>
+                                        <mat-option value="2">Sugerir el cambio obligando</mat-option>
+                                        <mat-option value="3">Cambio automático</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span class="ayudaCampo_2">Indique el modo de cambio del turno</span>    
+                            </div>-->
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">10.3. Limitar el tiempo de las ventanas de diálogo</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.limitar_respuestas" maxlength="4" autocomplete="off" name="detalle.limitar_respuestas" #limitar_respuestas="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">0=No limitar</mat-hint>
+                                    <mat-hint class="pista" align="end">Expresado en segundos</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el tiempo en que se muestran las ventanas de diálogos</span>                                 
+                            </div> 
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">10.4. Limitar el tiempo para el inicio de sesión</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput type="number" [(ngModel)]="detalle.limitar_inicio" maxlength="4" autocomplete="off" name="detalle.limitar_inicio" #limitar_inicio="ngModel" (input)="cambiando($event)">
+                                    <mat-hint class="pista" align="start">0=No limitar</mat-hint>
+                                    <mat-hint class="pista" align="end">Expresado en segundos</mat-hint>
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique el tiempo en que se muestran la ventana de inicio de sesión</span>                                 
+                            </div> 
+                        </div>
+
+                        <div class="grupoTitulo" *ngIf="eProgramador">99. CRONOS</div>    
+                        <div class="grupoCampos" *ngIf="eProgramador">
+                            <div class="registroCampo">
+                                <div class="registroTitulo">99.1 Habilitar el uso de móvil</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <mat-select [(value)]="detalle.agregar_movil" name="detalle.agregar_movil" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>  
+                            </div>
+                            
+                            <div class="registroCampo">
+                                <div class="registroTitulo">99.2 Habilitar Datos adicionales para vehículos</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <mat-select [(value)]="detalle.adicionales" name="detalle.adicionales" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>  
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">99.3 Aplicar la validación de licencias a los dispositivos</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <mat-select [(value)]="detalle.pagers_val" name="detalle.pagers_val" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>  
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">99.4 Mostrar el logo de Cronos en la aplicación</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <mat-select [(value)]="detalle.ver_logo_cronos" name="detalle.ver_logo_cronos" (selectionChange)=cambiando($event)>
+                                        <mat-option value="S">SI</mat-option>
+                                        <mat-option value="N">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>  
+                            </div>
+
+                            <div class="registroCampo">
+                                <div class="registroTitulo">99.5 URL de la página web de cronos</div>    
+                                <mat-form-field class="cajaTexto_2">
+                                    <input matInput  [(ngModel)]="detalle.url_cronos" maxlength="100" autocomplete="off" name="detalle.url_cronos" #url_cronos="ngModel" (input)="cambiando($event)">
+                                </mat-form-field>  
+                                <span class="ayudaCampo_2">Especifique la dirección para la página web</span>                                 
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="subir" *ngIf="verIrArriba" @arriba>
+            <button class="subirBoton" mat-flat-button (click)="irArriba()" [matTooltip]="irArribaTT" matTooltipClass = "toolTip">
+                <mat-icon class="subirIcono">keyboard_arrow_up</mat-icon>
+            </button>
+        </div>
+    </div>
+</div> 

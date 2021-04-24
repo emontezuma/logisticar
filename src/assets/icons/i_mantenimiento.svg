@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"  x="0px" y="0px" width="32" height="32" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve" viewbox="0 0 32 32">
+
+<path class="st0" d="M13.145,62.531c0,0-0.104-6.184,4.139-13.531c4.242-7.35,10.606-18.373,10.606-18.373l5.512,3.183  c0,0-6.364,11.021-10.607,18.371C18.552,59.529,13.145,62.531,13.145,62.531z" style="fill-rule:evenodd;clip-rule:evenodd;fill:#717565;;"></path>
+<g>
+	<defs>
+		<polygon id="57430882_SVGID_1__grid" points="21.941,25.815 35.184,10.038 47.585,17.197 40.542,36.555   "></polygon>
+	</defs>
+	<use xlink:href="#57430882_SVGID_1__grid" class="stshockcolor" style="fill: rgb(199, 68, 28); overflow: visible; fill-rule: evenodd; clip-rule: evenodd;" data-st="fill:#BCD676;;overflow:visible;fill-rule:evenodd;clip-rule:evenodd;"></use>
+	<clipPath id="57430882_SVGID_2__grid">
+		<use xlink:href="#57430882_SVGID_1__grid" style="overflow:visible;"></use>
+	</clipPath>
+	<polygon class="st2" points="47.585,30.278 43.468,30.278 33.169,12.438 47.585,12.438  " style="opacity:0.15;clip-path:url(#57430882_SVGID_2__grid);fill-rule:evenodd;clip-rule:evenodd;fill:#020200;;"></polygon>
+</g>
+<path class="stshockcolor" d="M12.484,25.295l33.237,19.189c0,0,3.599-6.23-0.557-8.631C41.01,33.455,24.392,23.86,20.237,21.462  C16.083,19.063,12.484,25.295,12.484,25.295z" style="fill: rgb(199, 68, 28);" data-st="fill:#BCD676;;overflow:visible;fill-rule:evenodd;clip-rule:evenodd;"></path>
+<path class="stshockcolor" d="M50.718,22.571c3.955,2.283,8.522-5.627,4.567-7.911C51.33,12.377,37.486,4.384,33.531,2.1  s-8.522,5.627-4.567,7.911C32.919,12.294,46.763,20.288,50.718,22.571z" style="fill: rgb(199, 68, 28);" data-st="fill:#BCD676;;overflow:visible;fill-rule:evenodd;clip-rule:evenodd;"></path>
+</svg>

@@ -1,0 +1,36 @@
+<div class="contenido" class="mat-typography">
+    <div class="cabecera" mat-dialog-title>
+        <mat-icon class="iconoBarras iconPB_2" [svgIcon]="datos.icono0"></mat-icon>
+        <span class="titulo">{{ datos.titulo }}</span>
+    </div>
+    
+    
+    <div class="cajaLista" *ngIf="datos.mensaje.length>0">
+        <div mat-dialog-conten class ="lista" [innerHTML]="datos.mensaje" *ngIf="datos.mensaje.length>0" [ngStyle]="{ 'font-size': movil ? '14px' : '17px' }"></div>
+    </div>
+    <div class="registroCampo" *ngIf="datos.mensaje.length==0">
+        <div class="registroTitulo">{{ tActual }}</div>    
+        <div class="registroTitulo">Seleccione el próximo turno</div>    
+        <mat-form-field class="cajaTexto_2">
+            <mat-select [(ngModel)]="datos.idTurno" name="datos.idTurno">
+                <mat-option *ngFor="let turno of turnos; let i = index" [value]="turno.id">{{ turno.nombre }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <span [ngClass]="{ ayudaCampo_2: datos.id!=-1, ayudaCampo: datos.id==-1 }">{{ mensajeTurno }}</span>                                
+    </div>
+    <div class="pie" mat-dialog-actions>
+        <button class="positivo indice" mat-button (mouseover)="validar01=true;" (mouseout)="validar01=false;" [ngClass]="{ botHover: validar01 }" (click)="validar(1)" [ngStyle]="{ 'font-size': movil ? '13px' : '17px' }">
+            <mat-icon class="iconPB_3" [svgIcon]="datos.icono1"></mat-icon>
+            <span [ngClass]="{ botTexto: !movil, botTextoPeq: movil }">{{ datos.boton1STR }}</span>
+        </button>
+        <button class="boton indice" mat-button (mouseover)="validar02=true;" (mouseout)="validar02=false;" *ngIf="datos.botones>1 && mostrarCancelar" [ngClass]="{ botHover: validar02 }" (click)="validar(2)" [ngStyle]="{ 'font-size': movil ? '14px' : '17px' }">
+            <mat-icon class="iconPB" [svgIcon]="datos.icono2"></mat-icon>
+            <span [ngClass]="{ botTexto: !movil, botTextoPeq: movil }">{{ datos.boton2STR }}</span>
+        </button>
+        <button class="boton indice" mat-button (mouseover)="validar03=true;" (mouseout)="validar03=false;" *ngIf="datos.botones>2" [ngClass]="{ botHover: validar03 }" (click)="validar(3)" [ngStyle]="{ 'font-size': movil ? '14px' : '17px' }">
+            <mat-icon class="iconPB" [svgIcon]="datos.icono3"></mat-icon>
+            <span [ngClass]="{ botTexto: !movil, botTextoPeq: movil }">{{ datos.boton3STR }}</span>
+        </button>
+    </div>
+</div>
+    

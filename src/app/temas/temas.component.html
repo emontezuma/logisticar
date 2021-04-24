@@ -1,0 +1,263 @@
+<div class="contenido" class="mat-typography">
+    
+    <div class="cabecera" mat-dialog-title>
+        <mat-icon class="iconoBarras iconPB_2" svgIcon="i_situaciones"></mat-icon>
+        <span class="titulo">Documentación reporte</span>
+    </div>
+    <div class="registroCampo">     
+        <div class="registroTitulo">Nombre del tenma</div>    
+        <div class="registroValor">
+            <mat-form-field class="texto">
+                <input matInput #txtT1 [(ngModel)]="reporte" maxlength="50" autocomplete="off" name="reporte"  #reporte1 ="ngModel" (keydown.enter)="buscarColores()" (input)="iniReporte()">
+                <button mat-button *ngIf="reporte" matSuffix mat-icon-button aria-label="Clear" (click)="reporte = '';iniReporte()">
+                    <mat-icon class="iconPB" svgIcon="in_cerrar"></mat-icon>
+                </button>
+            </mat-form-field>     
+        </div>    
+    </div>
+    <div class="cajaLista">
+        <div mat-dialog-conten class ="lista">
+            <div class="grupoCampos">
+                <div class="registroCampo">
+                    <div class="registroTitulo">1 Color del fondo TOTAL</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_total" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">2 Color del fondo de la aplicación</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_aplicacion" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">3 Color de fondo barra superior</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_barra_superior" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">4 Color de texto barra superior</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_barra_superior" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">5 Color de fondo barra inferior</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_barra_inferior" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">6 Color de texto barra inferior</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_barra_inferior" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">7 Color de fondo de la selección</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_seleccion" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">8 Color de texto de la selección</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_seleccion" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">9 Color de fondo del botón normal</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_boton" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">10 Color de texto del botón normal</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_boton" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">11 Color de fondo del botón inactivo</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_boton_inactivo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">12 Color de texto del botón inactivo</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_boton_inactivo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">13 Color de fondo del botón principal</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_boton_positivo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">14 Color de texto del botón principal</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_boton_positivo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">15 Color de fondo del botón alarma</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_boton_negativo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">16 Color de texto del botón alarma</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_boton_negativo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">17 Color de fondo del botón de barra superior</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_boton_barra" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">18 Color de texto del botón barra superior</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_boton_barra" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">19 Color de fondo tarjeta</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_tarjeta" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">20 Color de texto normal en tarjeta</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_tarjeta" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">21 Color de texto resaltado en tarjeta</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_tarjeta_resalte" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">22 Color de fondo de tooltip (ayuda flotante)</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_tiptool" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">23 Color de texto de tooltip (ayuda flotante)</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_tiptool" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">22 Color de fondo de mensaje normal flotante (inferior)</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_snack_normal" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">23 Color de texto de mensaje normal flotante (inferior)</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_snack_normal" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">24 Color de fondo de mensaje de error flotante (inferior)</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_snack_error" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">25 Color de texto de mensaje de error flotante (inferior)</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_snack_error" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">26 Color de fondo de mensaje de error flotante (inferior)</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_snack_error" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">27 Color de texto de mensaje de error flotante (inferior)</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_snack_error" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">28 Color de borde general</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.borde_total" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">29 Color de borde objeto seleccionado</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.borde_seleccion" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">30 Color de borde objeto hover</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.borde_hover" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">31 Color de borde de botón normal</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.borde_boton" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">32 Color de borde de botón inactivo</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.borde_boton_inactivo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">33 Color de borde de tarjeta</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.borde_tarjeta" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">34 Color de borde de tooltip (ayuda flotante)</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.borde_tiptool" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">35 Color de fondo elementos PARES de una lista</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.color_par" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">36 Color de fondo elementos IMPARES de una lista</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.color_impar" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">37 Color de fondo del menú izquierdo (slider)</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_slider" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">38 Color de texto de sólo lectura</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.texto_solo_texto" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div class="registroCampo">
+                    <div class="registroTitulo">39 Color de fondo del logo</div>    
+                    <dx-color-box class="colores" [(value)]="detalle.fondo_logo" applyButtonText="Aceptar" cancelButtonText="Cancelar" (click)="cambiando()" (input)="cambiando()"></dx-color-box>
+                </div>
+
+                <div [ngClass]="{ registroCampo: detalle.estatus == 'A', registroCampo_i: detalle.estatus == 'I'}" [ngStyle]="{'color': detalle.eliminable == 'S' ? 'var(--texto_boton)' : 'var(--texto_boton_inactivo)', 'border-color': detalle.eliminable == 'S' ? 'var(--borde_tarjeta)' : 'var(--texto_boton_inactivo)' }">
+                    <div class="registroTitulo" >40 Estatus del tema</div>    
+                    <mat-form-field class="cajaTexto_2">
+                        <mat-select [(value)]="detalle.estatus" name="detalle.estatus" (selectionChange)=cambiando() [disabled]="detalle.eliminable=='N'">
+                            <mat-option value="A">ACTIVO</mat-option>
+                            <mat-option value="I">Inactivo</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div> 
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="pie" mat-dialog-actions>
+        <button class="positivo indice" mat-button (mouseover)="validar01=true;" (mouseout)="validar01=false;" [ngClass]="{ botHover: validar01 }" (click)="validar(1)" [disabled]="!bot1"  [ngStyle]="{ 'font-size': movil ? '11px' : '17px' }">
+            <mat-icon [ngClass]="{ iconPB_3: bot1, iconPB_3_disabled: !bot1 }" svgIcon="in_seleccionado"></mat-icon>
+            <span class="botTexto">Guardar</span>
+        </button>
+
+        <button class="boton indice" mat-button (mouseover)="validar02=true;" (mouseout)="validar02=false;" [ngClass]="{ botHover: validar02 }" (click)="validar(3)" [disabled]="!bot1" [ngStyle]="{ 'font-size': movil ? '11px' : '17px' }">
+            <mat-icon [ngClass]="{ iconPB_33: bot1, iconPB_3_disabled: !bot1 }" svgIcon="i_cancelar"></mat-icon>
+            <span class="botTexto">Cancelar</span>
+        </button>
+        <button class="boton indice" mat-button (mouseover)="validar03=true;" (mouseout)="validar03=false;" [ngClass]="{ botHover: validar03 }" (click)="eliminar()"  [ngStyle]="{ 'font-size': movil ? '11px' : '17px' }" [disabled]="!encontrado || detalle.eliminable=='N'">
+            <mat-icon [ngClass]="{ iconPB_33: encontrado && detalle.eliminable=='S', iconPB_3_disabled: !encontrado || detalle.eliminable=='N' }" svgIcon="i_eliminar"></mat-icon>
+            <span class="botTexto">Eliminar</span>
+        </button>
+        <button class="boton indice" mat-button (mouseover)="validar04=true;" (mouseout)="validar04=false;" [ngClass]="{ botHover: validar04 }" (click)="validar(2)"  [ngStyle]="{ 'font-size': movil ? '11px' : '17px' }">
+            <mat-icon class="iconPB" svgIcon="i_salir"></mat-icon>
+            <span class="botTexto">Cerrar</span>
+        </button>
+    </div>
+</div>
+    
